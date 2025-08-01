@@ -13,6 +13,7 @@ import {
   Content,
   MainContent,
   MenuItem,
+  ButtonSlide,
 } from "./styles";
 import theme from "../../styles/theme";
 import { useNavigate } from "react-router-dom";
@@ -31,38 +32,38 @@ const Home = () => {
             <Title>Bem-vindo ao Dev Club CRM</Title>
             <div>
               <MenuItem>
-                <button
+                <ButtonSlide
                   className="button_slide slide_diagonal"
                   onClick={() => navigate("/painel")}
                 >
                   <TrophyIcon size={60} color={theme.colors.text} weight="fill" />
                   <p>Troféus Admin</p>
-                </button>
+                </ButtonSlide>
               </MenuItem>
               <MenuItem>
-                <button
+                <ButtonSlide
                   className="button_slide slide_diagonal"
                   onClick={() => navigate("/links")}
                 >
                   <LinkIcon size={60} color={theme.colors.text} weight="fill" />
                   <p>Links Úteis</p>
-                </button>
+                </ButtonSlide>
               </MenuItem>
               <MenuItem>
-                <button className="button_slide slide_diagonal"
+                <ButtonSlide className="button_slide slide_diagonal"
                 onClick={() => navigate("/chat")}>
                   <ChatIcon size={60} color={theme.colors.text} />
-                  <p>CHAT</p>
-                </button>
-              </MenuItem>
-              {/* <MenuItem>
-                <button className="button_slide slide_diagonal"
-                onClick={() => navigate("/sorteios")}>
-                  <CloverIcon size={60} color={theme.colors.text} />
-                  <p>Sorteios</p>
-                </button>
+                  <p>IA Jéssyca</p>
+                </ButtonSlide>
               </MenuItem>
               <MenuItem>
+                <ButtonSlide className="button_slide slide_diagonal"
+                onClick={() => navigate("/iarodolfo")}>
+                  <ChatIcon size={60} color={theme.colors.text} />
+                  <p>IA Rodolfo</p>
+                </ButtonSlide>
+              </MenuItem>
+              {/* <MenuItem>
                 <button className="button_slide slide_diagonal">
                   <Wrench size={60} color={theme.colors.text} />
                   <p>Tools</p>

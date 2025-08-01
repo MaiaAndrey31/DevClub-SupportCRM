@@ -37,7 +37,10 @@ export default function Header({ status, page }) {
             Links Úteis
           </HeaderLink>
           <HeaderLink to={"/chat"} $isActive={pathname === "/chat"}>
-            CHAT
+            IA Jéssyca
+          </HeaderLink>
+          <HeaderLink to={"/iarodolfo"} $isActive={pathname === "/iarodolfo"}>
+            IA Rodolfo
           </HeaderLink>
           {/* <HeaderLink to={"/sorteios"} $isActive={pathname === "/sorteios"}>
             Sorteios

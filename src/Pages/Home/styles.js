@@ -1,9 +1,34 @@
 import styled from "styled-components";
 import theme from "../../styles/theme";
 
+// Layout components
+export const Layout = styled.div`
+  background: linear-gradient(135deg, #000c24 0%, #3e5c9e 100%);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+`;
+
+export const Content = styled.main`
+  flex: 1;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+`;
+
+export const MainContent = styled.div`
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  overflow-y: auto;
+`;
+
 export const HomeContainer = styled.div`
-height: 80%;
-width: 80vw;
+  height: 80%;
+  width: 80vw;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -31,85 +56,61 @@ export const Title = styled.h1`
   text-align: center;
   text-shadow: 1px 0px 5px rgba(0, 0, 0, 0.7);
 `;
-export const MenuItem = styled.div`
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-gap: 0.5rem;
-padding: 1rem;
 
-background-color: ${theme.colors.primaryDark};
-border-radius: ${theme.borderRadius};
-box-shadow: ${theme.boxShadow};
-transition: var(--transition);
-cursor: pointer;
-
-button {
+export const ButtonSlide = styled.button`
   display: flex;
-  height: 160px;
-  width: 160px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-
-  
-}
-
-p {
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: ${theme.colors.text};
-}
-
-.button_slide {
   color: #FFF;
   border: 2px solid ${theme.colors.accent};
-  border-radius: 0px;
+  border-radius: 0;
   padding: 18px 36px;
-  display: inline-block;
   font-family: "Lucida Console", Monaco, monospace;
   font-size: 14px;
   letter-spacing: 1px;
   cursor: pointer;
   box-shadow: inset 0 0 0 0 ${theme.colors.accent};
+  transition: ease-out 0.3s;
   -webkit-transition: ease-out 0.3s;
   -moz-transition: ease-out 0.3s;
-  transition: ease-out 0.3s;
-}
+  background: transparent;
 
+  &:hover {
+    box-shadow: inset 400px 50px 0 0 ${theme.colors.accent};
+  }
+`;
 
-
-.slide_diagonal:hover {
-  box-shadow: inset 400px 50px 0 0 ${theme.colors.accent};
-}
-
-#outer {
-  width: 364px;
-  margin: 50px auto 0 auto;
-  text-align: center;
-}
-`
-
-
-
-export const Layout = styled.div`
-  background: linear-gradient(135deg, #000c24 0%, #3e5c9e 100%);
+export const MenuItem = styled.div`
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-`;
-export const Content = styled.div`
-  display: flex;
-  flex: 1;
-  overflow: hidden;
-`;
-export const MainContent = styled.main`
-  flex: 1;
-  padding: 1.5rem;
-  overflow-y: auto;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background-color: ${theme.colors.primaryDark};
+  border-radius: ${theme.borderRadius};
+  box-shadow: ${theme.boxShadow};
+  transition: var(--transition);
+  cursor: pointer;
+
+  button {
+    display: flex;
+    height: 160px;
+    width: 160px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+  }
+
+  p {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: ${theme.colors.text};
+  }
 `;

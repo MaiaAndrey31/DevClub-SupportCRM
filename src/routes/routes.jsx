@@ -5,6 +5,7 @@ import Links from "../Pages/Links";
 import Login from "../Pages/Login";
 import { Private } from "./Private";
 import Chat from "../Pages/Chat";
+import ChatRodolfo from "../Pages/ChatRodolfo";
 
 const router = createBrowserRouter([
   {
@@ -28,10 +29,10 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/sorteios",
+    path: "/iarodolfo",
     element: (
       <Private>
-        <Chat />
+        <ChatRodolfo />
       </Private>
     ),
   },
