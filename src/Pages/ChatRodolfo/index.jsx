@@ -82,7 +82,7 @@ function ChatRodolfo() {
                             color: msg.tipo === 'ia' ? '#f0f0f0' : '#56B459',
                         }}
                     >
-                        <strong>{msg.tipo === 'ia' ? 'Jéssyca:' : 'Você:'}</strong>
+                        <strong>{msg.tipo === 'ia' ? 'Rodolfo:' : 'Você:'}</strong>
                         <br />
                         <span style={{
                             display: 'inline-block',
