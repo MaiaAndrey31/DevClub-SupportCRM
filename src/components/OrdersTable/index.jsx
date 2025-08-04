@@ -3,13 +3,27 @@ import { TableContainer, Table } from './styles';
 import PropTypes from 'prop-types';
 import { PencilIcon, EyeIcon } from '@phosphor-icons/react';
 
+// Função para converter a data para um objeto Date
+const getDateFromPedido = (pedido) => {
+  if (!pedido.date) return new Date(0); // Data muito antiga se não houver data
+  return typeof pedido.date.toDate === 'function' 
+    ? pedido.date.toDate() 
+    : new Date(pedido.date);
+};
+
 export default function OrdersTable({ pedidos, onView, onEdit }) {
+  // Ordenar os pedidos por data (mais recente primeiro)
+  const pedidosOrdenados = [...pedidos].sort((a, b) => {
+    const dateA = getDateFromPedido(a);
+    const dateB = getDateFromPedido(b);
+    return dateB - dateA; // Ordem decrescente (mais recente primeiro)
+  });
+
   return (
     <TableContainer>
       <Table>
         <thead>
-          <tr >
-            
+          <tr>
             <th style={{ textAlign: 'center', fontSize: '12px' }}>Nome</th>
             <th style={{ textAlign: 'center', fontSize: '12px' }}>Telefone</th>
             <th style={{ textAlign: 'center', fontSize: '12px' }}>Tipo de Troféu</th>
@@ -19,12 +33,12 @@ export default function OrdersTable({ pedidos, onView, onEdit }) {
           </tr>
         </thead>
         <tbody>
-          {pedidos.length === 0 ? (
+          {pedidosOrdenados.length === 0 ? (
             <tr>
               <td colSpan={7} className="loading">Carregando pedidos...</td>
             </tr>
           ) : (
-            pedidos.map(pedido => (
+            pedidosOrdenados.map(pedido => (
               <tr key={pedido.id}>
                 
                 <td style={{ textAlign: 'center', fontSize: '12px' }}>{pedido.nome}</td>
