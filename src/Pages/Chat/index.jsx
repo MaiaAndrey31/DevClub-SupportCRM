@@ -1,7 +1,8 @@
 // src/Pages/Chat/index.jsx
 
 import { useState, useEffect, useRef } from 'react';
-import { perguntarChatGPT } from '../../services/openai';
+import { perguntarChatGPT } from "../../services/openai";
+import { toast } from 'react-toastify';
 import Header from '../../components/Header';
 
 function Chat() {
@@ -32,11 +33,13 @@ function Chat() {
             );
         } catch (error) {
             console.error('Erro ao enviar mensagem:', error);
+            const errorMsg = 'Ocorreu um erro ao processar sua mensagem. Por favor, tente novamente.';
+            toast.error(errorMsg);
             // Remove o indicador de carregamento e mostra mensagem de erro
             setRespostas((prev) => 
                 prev.filter(msg => !msg.isLoading).concat({ 
                     tipo: 'ia', 
-                    texto: 'Desculpe, ocorreu um erro ao processar sua mensagem. Por favor, tente novamente.' 
+                    texto: errorMsg
                 })
             );
         }

@@ -1,6 +1,7 @@
 // src/services/openai.js
 
 const API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
+import { toast } from 'react-toastify';
 
 const AGENT_CONFIG = {
   model: "gpt-4-turbo",
@@ -285,8 +286,10 @@ Finalize com abertura para dúvidas ou novo contato.
 
 export async function perguntarChatGPT(pergunta) {
   if (!API_KEY) {
+    const errorMsg = "Erro: Chave da API não configurada. Por favor, verifique as configurações.";
     console.error("OpenAI API key is not set");
-    return "Erro: Chave da API não configurada. Por favor, verifique as configurações.";
+    toast.error(errorMsg);
+    return errorMsg;
   }
 
   try {
@@ -308,8 +311,10 @@ export async function perguntarChatGPT(pergunta) {
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
+      const errorMsg = `Erro na API: ${errorData.error?.message || "Erro desconhecido"}`;
       console.error("OpenAI API Error:", errorData);
-      return `Erro na API: ${errorData.error?.message || "Erro desconhecido"}`;
+      toast.error(errorMsg);
+      return errorMsg;
     }
 
     const data = await response.json();
@@ -331,7 +336,9 @@ export async function perguntarChatGPT(pergunta) {
 
     return resposta;
   } catch (error) {
+    const errorMsg = "Desculpe, estou enfrentando dificuldades técnicas. Por favor, tente novamente mais tarde.";
     console.error("Erro ao chamar a API:", error);
-    return "Desculpe, estou enfrentando dificuldades técnicas. Por favor, tente novamente mais tarde.";
+    toast.error(errorMsg);
+    return errorMsg;
   }
 }

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { X, FloppyDisk } from '@phosphor-icons/react';
 import { createLink, updateLink } from '../../api/api';
+import { toast } from 'react-toastify';
 import {
   ModalOverlay,
   ModalContent,
@@ -69,7 +70,10 @@ export const LinkForm = ({ link, onClose, onSuccess }) => {
       onSuccess();
       onClose();
     } catch (err) {
-      setError('Erro ao salvar o link. Tente novamente.');
+      const errorMsg = 'Erro ao salvar o link. Tente novamente.';
+      setIsSubmitting(false);
+      setError(errorMsg);
+      toast.error(errorMsg);
       console.error('Erro ao salvar link:', err);
     } finally {
       setIsSubmitting(false);

@@ -19,6 +19,7 @@ import {
 import Header from "../../components/Header";
 import LinkForm from "../../components/LinkForm";
 import { getLinks, deleteLink } from "../../api/api";
+import { toast } from 'react-toastify';
 
 const Links = () => {
   const [links, setLinks] = useState([]);
@@ -40,7 +41,9 @@ const Links = () => {
       const data = await getLinks();
       setLinks(data);
     } catch (err) {
-      setError("Erro ao carregar os links. Tente novamente mais tarde.");
+      const errorMsg = "Erro ao carregar os links. Tente novamente mais tarde.";
+      setError(errorMsg);
+      toast.error(errorMsg);
       console.error("Erro ao carregar links:", err);
     } finally {
       setIsLoading(false);
@@ -71,18 +74,22 @@ const Links = () => {
       setIsDeleting(id);
       await deleteLink(id);
       setLinks(links.filter((link) => link.id !== id));
+      toast.success("Link excluído com sucesso!");
     } catch (err) {
+      const errorMsg = "Não foi possível excluir o link. Tente novamente.";
       console.error("Erro ao excluir link:", err);
-      setError("Não foi possível excluir o link. Tente novamente.");
+      toast.error(errorMsg);
+      setError(errorMsg);
     } finally {
       setIsDeleting(false);
     }
   };
 
-  const handleFormSuccess = () => {
+  const handleFormSuccess = (isNew = true) => {
     loadLinks();
     setIsFormOpen(false);
     setCurrentLink(null);
+    toast.success(isNew ? "Link criado com sucesso!" : "Link atualizado com sucesso!");
   };
   // Function to render icon dynamically based on icon name
   const renderIcon = (iconName, size = 32) => {
@@ -193,7 +200,7 @@ const Links = () => {
             setIsFormOpen(false);
             setCurrentLink(null);
           }}
-          onSuccess={handleFormSuccess}
+          onSuccess={() => handleFormSuccess(!currentLink)}
         />
       )}
     </Layout>

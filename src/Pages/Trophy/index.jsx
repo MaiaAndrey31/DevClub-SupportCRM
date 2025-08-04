@@ -15,6 +15,7 @@ import {
   
 } from 'firebase/firestore'
 import { Content, Layout, MainContent } from './styles'
+import { toast } from 'react-toastify'
 
 function Trophy() {
   const [status, setStatus] = useState('connecting')
@@ -188,35 +189,43 @@ function Trophy() {
       if (success) {
         const updatedPedido = { ...modalPedido, status: newStatus };
         setModalPedido(updatedPedido);
-        alert('Status atualizado com sucesso!');
+        toast.success(`Status atualizado para: ${newStatus}`);
         
         // Dispara o webhook em segundo plano
-        triggerWebhook(updatedPedido);
+        triggerWebhook(updatedPedido).catch(error => {
+          console.error('Erro ao disparar webhook:', error);
+          toast.error('Status atualizado, mas houve um erro ao notificar o sistema.');
+        });
       } else {
         throw new Error('Falha ao atualizar o status no banco de dados');
       }
     } catch (error) {
       console.error('Erro ao atualizar status:', error);
-      alert('Erro ao atualizar status. Tente novamente.');
+      toast.error('Erro ao atualizar status. Tente novamente.');
     }
-  }
+  };
 
   // Função para atualizar código de rastreio
   const handleRastreioUpdate = async (novoRastreio) => {
-    if (!modalPedido || !modalPedido.id) return
+    if (!modalPedido || !modalPedido.id) return;
 
-    const success = await updatePedidoInFirebase(modalPedido.id, {
-      rastreio: novoRastreio,
-    })
-
-    if (success) {
-      setModalPedido((prev) => ({
-        ...prev,
+    try {
+      const success = await updatePedidoInFirebase(modalPedido.id, {
         rastreio: novoRastreio,
-      }))
-      alert('Código de rastreio atualizado com sucesso!')
-    } else {
-      alert('Erro ao atualizar código de rastreio. Tente novamente.')
+      });
+
+      if (success) {
+        setModalPedido((prev) => ({
+          ...prev,
+          rastreio: novoRastreio,
+        }));
+        toast.success('Código de rastreio atualizado com sucesso!');
+      } else {
+        throw new Error('Falha ao atualizar o código de rastreio');
+      }
+    } catch (error) {
+      console.error('Erro ao atualizar rastreio:', error);
+      toast.error('Erro ao atualizar código de rastreio. Tente novamente.');
     }
   }
 

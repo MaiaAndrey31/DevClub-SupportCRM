@@ -5,6 +5,7 @@ import imgLogo from "../../assets/logo.jpg";
 import { auth } from "../../services/firebaseConnection";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -19,8 +20,8 @@ export default function Login() {
         navigate("/", { replace: true });
       })
       .catch((error) => {
-        alert("Erro ao fazer login");
-        console.log(error);
+        toast.error("Erro ao fazer login. Verifique suas credenciais e tente novamente.");
+        console.error("Erro de login:", error);
       });
   }
 
