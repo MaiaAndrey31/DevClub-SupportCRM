@@ -148,7 +148,7 @@ const Links = () => {
                 <LinkContent>
                   <LinkTitle>{link.title}</LinkTitle>
                   <LinkDescription>
-                    {link.url}
+                    {link.description}
                   </LinkDescription>
                   {copiedUrl === link.url && (
                     <CopiedMessage>
@@ -165,6 +165,7 @@ const Links = () => {
                     title="Editar"
                   >
                     <PencilSimpleIcon size={18} />
+                    <span>Editar</span>
                   </ActionButton>
                   <ActionButton
                     onClick={(e) => {
@@ -176,16 +177,9 @@ const Links = () => {
                     $danger
                   >
                     <TrashIcon size={18} />
+                    <span>Excluir</span>
                   </ActionButton>
-                  <ActionButton
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      copyToClipboard(link.url);
-                    }}
-                    title="Copiar link"
-                  >
-                    <CopyIcon size={18} />
-                  </ActionButton>
+                  
                 </ActionButtons>
               </LinkCard>
             ))}

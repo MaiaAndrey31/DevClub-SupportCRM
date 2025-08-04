@@ -32,19 +32,19 @@ export const Title = styled.h1`
 export const LinksGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
+  gap: 1rem;
   margin-top: 2rem;
 `;
 
 export const LinkCard = styled.div`
   background: ${theme.colors.purple};
   border-radius: 8px;
-  padding: 1.5rem;
+  padding: 1rem;
   display: flex;
   align-items: flex-start;
   gap: 1.25rem;
   transition: all 0.2s ease;
-  border: 1px solid ${theme.colors.border};
+  border: 1px solid ${theme.colors.ac};
   position: relative;
   overflow: hidden;
   cursor: pointer;
@@ -72,12 +72,13 @@ export const LinkContent = styled.div`
 export const LinkTitle = styled.h3`
   margin: 0 0 0.5rem 0;
   color: ${theme.colors.accent};
+  font-size: 1rem;
 `;
 
 export const LinkDescription = styled.p`
   margin: 0;
   color: ${theme.colors.textLight};
-  font-size: 0.9rem;
+  font-size: 0.7rem;
   word-break: break-all;
 `;
 
@@ -94,6 +95,7 @@ export const CopiedMessage = styled.span`
 
 export const ActionButtons = styled.div`
   display: flex;
+  flex-direction: column;
   gap: 0.5rem;
   margin-left: auto;
   padding-left: 1rem;
@@ -107,6 +109,7 @@ export const ActionButton = styled.button`
   padding: 0.5rem;
   border-radius: 4px;
   display: flex;
+  gap: 0.5rem;
   align-items: center;
   justify-content: center;
   transition: all 0.2s;
