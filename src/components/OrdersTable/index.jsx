@@ -10,12 +10,12 @@ export default function OrdersTable({ pedidos, onView, onEdit }) {
         <thead>
           <tr >
             
-            <th style={{ textAlign: 'center' }}>Nome</th>
-            <th style={{ textAlign: 'center' }}>Telefone</th>
-            <th style={{ textAlign: 'center' }}>Tipo de Troféu</th>
-            <th style={{ textAlign: 'center' }}>Status</th>
-            <th style={{ textAlign: 'center' }}>Data</th>
-            <th style={{ textAlign: 'center' }}>Ações</th>
+            <th style={{ textAlign: 'center', fontSize: '12px' }}>Nome</th>
+            <th style={{ textAlign: 'center', fontSize: '12px' }}>Telefone</th>
+            <th style={{ textAlign: 'center', fontSize: '12px' }}>Tipo de Troféu</th>
+            <th style={{ textAlign: 'center', fontSize: '12px' }}>Status</th>
+            <th style={{ textAlign: 'center', fontSize: '12px' }}>Data</th>
+            <th style={{ textAlign: 'center', fontSize: '12px' }}>Ações</th>
           </tr>
         </thead>
         <tbody>
@@ -27,11 +27,11 @@ export default function OrdersTable({ pedidos, onView, onEdit }) {
             pedidos.map(pedido => (
               <tr key={pedido.id}>
                 
-                <td style={{ textAlign: 'center' }}>{pedido.nome}</td>
-                <td style={{ textAlign: 'center' }}>{pedido.telefone}</td>
-                <td style={{ textAlign: 'center' }}>{pedido.trophyType || 'Não informado'}</td>
-                <td style={{ textAlign: 'center' }}><StatusBadge status={pedido.status} /></td>
-                <td style={{ textAlign: 'center' }}>{pedido.date && typeof pedido.date.toDate === 'function'
+                <td style={{ textAlign: 'center', fontSize: '12px' }}>{pedido.nome}</td>
+                <td style={{ textAlign: 'center', fontSize: '12px' }}>{pedido.telefone}</td>
+                <td style={{ textAlign: 'center', fontSize: '12px' }}>{pedido.trophyType || 'Não informado'}</td>
+                <td style={{ textAlign: 'center', fontSize: '12px' }}><StatusBadge status={pedido.status} /></td>
+                <td style={{ textAlign: 'center', fontSize: '12px' }}>{pedido.date && typeof pedido.date.toDate === 'function'
   ? pedido.date.toDate().toLocaleString()
   : pedido.date
 }</td>

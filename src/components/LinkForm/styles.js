@@ -63,6 +63,16 @@ export const FormGroup = styled.div`
     font-size: 0.9rem;
     font-weight: 500;
   }
+    select{
+        padding: 0.25rem 0.5rem;
+    font-size: 1rem; 
+    font-weight: 800;
+    color: ${theme.colors.purple}; 
+    background-color: ${theme.colors.accent};
+    border-radius: 10px;
+    border: 2px solid ${theme.colors.purple};
+    
+    }
 `;
 
 export const Input = styled.input`
@@ -138,8 +148,8 @@ export const PrimaryButton = styled.button`
 
 export const SecondaryButton = styled.button`
   background: transparent;
-  color: ${theme.colors.textLight};
-  border: 1px solid ${theme.colors.border};
+  color: ${theme.colors.purple};
+  border: 1px solid ${theme.colors.purple};
   border-radius: 6px;
   padding: 0.75rem 1.5rem;
   font-size: 1rem;

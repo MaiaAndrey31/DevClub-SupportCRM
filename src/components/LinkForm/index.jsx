@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { X, FloppyDisk } from '@phosphor-icons/react';
+import { X, FloppyDisk, FloppyDiskIcon } from '@phosphor-icons/react';
 import { createLink, updateLink } from '../../api/api';
 import { toast } from 'react-toastify';
 import {
@@ -151,7 +151,7 @@ export const LinkForm = ({ link, onClose, onSuccess }) => {
                 Cancelar
               </SecondaryButton>
               <PrimaryButton type="submit" disabled={isSubmitting}>
-                <FloppyDisk size={18} />
+                <FloppyDiskIcon size={18} />
                 {isSubmitting ? 'Salvando...' : 'Salvar'}
               </PrimaryButton>
             </ButtonGroup>
