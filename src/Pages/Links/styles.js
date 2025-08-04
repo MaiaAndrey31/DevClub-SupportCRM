@@ -113,7 +113,8 @@ export const ActionButton = styled.button`
   align-items: center;
   justify-content: center;
   transition: all 0.2s;
-  
+  font-size: 0.6rem;
+  font-weight: 600;
 
   &:hover {
     background: ${({ $danger }) => $danger ? 'rgba(255, 107, 107, 0.1)' : 'rgba(255, 255, 255, 0.05)'};
