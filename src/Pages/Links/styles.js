@@ -23,7 +23,7 @@ export const Container = styled.div`
 `;
 
 export const Title = styled.h1`
-  color: ${theme.colors.accent};
+  color: ${theme.colors.text};
   text-align: center;
   margin-bottom: 2rem;
   font-size: 2rem;
@@ -37,22 +37,23 @@ export const LinksGrid = styled.div`
 `;
 
 export const LinkCard = styled.div`
-  background: ${theme.colors.purple};
+ background: ${theme.colors.primaryDark};
   border-radius: 8px;
   padding: 1rem;
   display: flex;
   align-items: flex-start;
+  box-shadow: 0 0 8px ${theme.colors.primaryLight};
   gap: 1.25rem;
   transition: all 0.2s ease;
-  border: 1px solid ${theme.colors.ac};
+  border: 1px groove ${theme.colors.purple};
   position: relative;
   overflow: hidden;
   cursor: pointer;
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    border-color: ${theme.colors.accent};
+    transform: translateY(-1px);
+    border: 1px groove ${theme.colors.accent};
+    
   }
 
   &:active {
@@ -72,13 +73,22 @@ export const LinkContent = styled.div`
 export const LinkTitle = styled.h3`
   margin: 0 0 0.5rem 0;
   color: ${theme.colors.text};
+  border-bottom: 2px groove ${theme.colors.purple};
+  text-align: center;
   font-size: 1rem;
+
+  &:hover {
+    
+    border-bottom: 2px groove ${theme.colors.accent};
+    
+  }
 `;
 
 export const LinkDescription = styled.p`
   margin: 0;
   color: ${theme.colors.textLight};
   font-size: 0.7rem;
+  font-weight: 700;
   word-break: break-all;
 `;
 
@@ -102,7 +112,7 @@ export const ActionButtons = styled.div`
 `;
 
 export const ActionButton = styled.button`
-  background: ${theme.colors.primaryDark};
+  background: ${theme.colors.purple};
   border: none;
   color: ${({ $danger }) => $danger ? '#ff6b6b' : theme.colors.text};
   cursor: pointer;
@@ -117,7 +127,7 @@ export const ActionButton = styled.button`
   font-weight: 600;
 
   &:hover {
-    background: ${({ $danger }) => $danger ? 'rgba(255, 107, 107, 0.1)' : 'rgba(255, 255, 255, 0.05)'};
+    background: ${({ $danger }) => $danger ? 'rgba(255, 107, 107, 0.4)' : 'rgba(255, 255, 255, 0.4)'};
     opacity: 1;
     transform: translateY(-1px);
   }

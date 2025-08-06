@@ -36,7 +36,7 @@ export const HomeContainer = styled.div`
   color: #fff;
   background-color: ${theme.colors.purple};
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0 12px ${theme.colors.primaryLight};
   padding: 2rem 1rem;
   margin: 2rem auto;
 
@@ -71,14 +71,14 @@ export const ButtonSlide = styled.button`
   font-size: 14px;
   letter-spacing: 1px;
   cursor: pointer;
-  box-shadow: inset 0 0 0 0 ${theme.colors.accent};
+  box-shadow: 0 0 12px ${theme.colors.primaryLight};
   transition: ease-out 0.3s;
   -webkit-transition: ease-out 0.3s;
   -moz-transition: ease-out 0.3s;
   background: transparent;
 
   &:hover {
-    box-shadow: inset 400px 50px 0 0 ${theme.colors.accent};
+    box-shadow: inset 0px 0px 40px 0 ${theme.colors.primaryLight};
   }
 `;
 
@@ -91,9 +91,9 @@ export const MenuItem = styled.div`
   padding: 1rem;
   background-color: ${theme.colors.primaryDark};
   border-radius: ${theme.borderRadius};
-  box-shadow: ${theme.boxShadow};
-  transition: var(--transition);
-  cursor: pointer;
+box-shadow: 0 0 12px ${theme.colors.primaryLight};
+transition: var(--transition);
+cursor: pointer;
 
   button {
     display: flex;
