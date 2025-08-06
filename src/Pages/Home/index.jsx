@@ -36,7 +36,7 @@ const Home = () => {
                   className="button_slide slide_diagonal"
                   onClick={() => navigate("/painel")}
                 >
-                  <TrophyIcon size={60} color={theme.colors.text} weight="fill" />
+                  <TrophyIcon size={60} color={theme.colors.accent} weight="fill" />
                   <p>Troféus Admin</p>
                 </ButtonSlide>
               </MenuItem>
@@ -45,21 +45,21 @@ const Home = () => {
                   className="button_slide slide_diagonal"
                   onClick={() => navigate("/links")}
                 >
-                  <LinkIcon size={60} color={theme.colors.text} weight="fill" />
+                  <LinkIcon size={60} color={theme.colors.accent} weight="fill" />
                   <p>Links Úteis</p>
                 </ButtonSlide>
               </MenuItem>
               <MenuItem>
                 <ButtonSlide className="button_slide slide_diagonal"
                 onClick={() => navigate("/chat")}>
-                  <ChatIcon size={60} color={theme.colors.text} />
+                  <ChatIcon size={60} color={theme.colors.accent} />
                   <p>IA Jéssyca</p>
                 </ButtonSlide>
               </MenuItem>
               <MenuItem>
                 <ButtonSlide className="button_slide slide_diagonal"
                 onClick={() => navigate("/iarodolfo")}>
-                  <ChatIcon size={60} color={theme.colors.text} />
+                  <ChatIcon size={60} color={theme.colors.accent} />
                   <p>IA Rodolfo</p>
                 </ButtonSlide>
               </MenuItem>
