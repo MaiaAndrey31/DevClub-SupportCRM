@@ -256,6 +256,7 @@ export const ModalHeader = styled.div`
 export const ModalTitle = styled.h3`
   font-size: 0.8rem;
   font-weight: 600;
+  border-bottom: 1px groove ${theme.colors.purple};
 
   span {
     font-size: 1.5rem;
