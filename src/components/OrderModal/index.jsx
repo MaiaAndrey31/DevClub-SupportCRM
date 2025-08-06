@@ -71,7 +71,7 @@ export default function OrderModal({
     <ModalOverlay $show={show} onClick={onClose}>
       <ModalContent onClick={e => e.stopPropagation()}>
         <ModalHeader>
-          <ModalTitle>Detalhes do Pedido {pedido.nome}</ModalTitle>
+          <ModalTitle>Detalhes do Pedido <span>{pedido.nome}</span></ModalTitle>
           <CloseButton onClick={onClose}>&times;</CloseButton>
         </ModalHeader>
         <div>

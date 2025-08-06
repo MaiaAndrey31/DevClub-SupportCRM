@@ -31,11 +31,12 @@ export const ModalHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid ${theme.colors.border};
+  border-bottom: 1px groove ${theme.colors.purple};
   
   h3 {
     margin: 0;
     color: ${theme.colors.text};
+    text-shadow: 0 0 12px ${theme.colors.primaryLight};
     font-size: 1.25rem;
   }
 `;
@@ -58,31 +59,33 @@ export const FormGroup = styled.div`
   
   label {
     display: block;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.4rem;
     color: ${theme.colors.textLight};
     font-size: 0.9rem;
     font-weight: 500;
   }
     select{
         padding: 0.25rem 0.5rem;
-    font-size: 1rem; 
+    font-size: 0.75rem; 
     font-weight: 800;
-    color: ${theme.colors.purple}; 
-    background-color: ${theme.colors.accent};
+    color: ${theme.colors.text}; 
+    background-color: ${theme.colors.purple};
     border-radius: 10px;
-    border: 2px solid ${theme.colors.purple};
+    border: 2px groove ${theme.colors.accent};
+    box-shadow: 0 0 10px ${theme.colors.primaryLight};
     
     }
 `;
 
 export const Input = styled.input`
   width: 100%;
-  padding: 0.75rem 1rem;
-  border: 1px solid ${theme.colors.border};
+  padding: 0.5rem 1rem;
+  border: 1px groove ${theme.colors.purple};
   border-radius: 6px;
-  background: ${theme.colors.primary};
+  background: ${theme.colors.primaryDark};
   color: ${theme.colors.text};
-  font-size: 1rem;
+  box-shadow: 0 0 10px ${theme.colors.primaryLight};
+  font-size: 0.75rem;
   transition: border-color 0.2s, box-shadow 0.2s;
   
   &:focus {
@@ -121,18 +124,22 @@ export const PrimaryButton = styled.button`
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background: ${theme.colors.accent};
-  color: white;
-  border: none;
+  background: transparent;
+  box-shadow: 0 0 8px ${theme.colors.primaryLight};
+  border: 1px groove ${theme.colors.accent};
+  color: ${theme.colors.text};
+  
   border-radius: 6px;
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s, transform 0.1s;
+  transition: ease-in-out background-color 0.3s, transform 0.2s;
   
   &:hover {
-    background: ${theme.colors.accentDark};
+    background: ${theme.colors.accent};
+    border: 1px groove ${theme.colors.purple};
+    color: ${theme.colors.purple};
   }
   
   &:active {
@@ -140,7 +147,7 @@ export const PrimaryButton = styled.button`
   }
   
   &:disabled {
-    background: ${theme.colors.border};
+    background: ${theme.colors.warning};
     cursor: not-allowed;
     opacity: 0.7;
   }
@@ -148,9 +155,10 @@ export const PrimaryButton = styled.button`
 
 export const SecondaryButton = styled.button`
   background: transparent;
-  color: ${theme.colors.purple};
-  border: 1px solid ${theme.colors.purple};
+  color: ${theme.colors.text};
+  border: 1px groove ${theme.colors.purple};
   border-radius: 6px;
+  box-shadow: 0 0 8px ${theme.colors.primaryLight};
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
   font-weight: 500;
@@ -159,7 +167,7 @@ export const SecondaryButton = styled.button`
   
   &:hover {
     background: ${theme.colors.primaryLight};
-    border-color: ${theme.colors.accent};
+    border-color: ${theme.colors.purple};
     color: ${theme.colors.accent};
   }
 `;
@@ -167,7 +175,7 @@ export const SecondaryButton = styled.button`
 export const IconButton = styled.button`
   background: none;
   border: none;
-  color: ${theme.colors.textLight};
+  color: ${theme.colors.abacatão};
   cursor: pointer;
   padding: 0.25rem;
   border-radius: 4px;
@@ -191,9 +199,9 @@ export const IconButton = styled.button`
 export const Select = styled.select`
   width: 100%;
   padding: 0.75rem 1rem;
-  border: 1px solid ${theme.colors.border};
+  border: 1px groove ${theme.colors.accent};
   border-radius: 6px;
-  background: ${theme.colors.primary};
+  background: ${theme.colors.primaryDark};
   color: ${theme.colors.text};
   font-size: 1rem;
   appearance: none;

@@ -253,17 +253,24 @@ export const ModalHeader = styled.div`
   }
 `;
 
-export const ModalTitle = styled.h2`
-  font-size: 1.5rem;
+export const ModalTitle = styled.h3`
+  font-size: 0.8rem;
   font-weight: 600;
+
+  span {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: ${theme.colors.abacatão};
+    text-shadow: 0 0 12px ${theme.colors.primaryLight};
+  }
   @media (max-width: 500px) {
-    font-size: 1.1rem;
+    font-size: 0.5rem;
   }
 `;
 
 export const CloseButton = styled.button`
   font-size: 1.75rem;
-  color: #888;
+  color: ${theme.colors.abacatão};
   background: none;
   border: none;
   cursor: pointer;
