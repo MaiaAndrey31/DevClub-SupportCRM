@@ -42,7 +42,7 @@ export const LinkCard = styled.div`
   padding: 1rem;
   display: flex;
   align-items: flex-start;
-  box-shadow: 0 0 8px ${theme.colors.primaryLight};
+  box-shadow: 0 0 8px ${theme.colors.accent};
   gap: 1.25rem;
   transition: all 0.2s ease;
   border: 1px groove ${theme.colors.purple};
