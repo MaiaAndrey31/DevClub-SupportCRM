@@ -65,7 +65,7 @@ textarea:focus {
     outline: none;
     border-color: var(--accent-color);
     box-shadow: 0 0 0 2px rgba(86, 180, 89, 0.25);
-    background-color: rgba(0, 12, 36, 0.7);
+    background-color: ${theme.colors.primaryDark};
 }
 
 /* Estilização personalizada para selects */
