@@ -2,6 +2,7 @@ import StatusBadge from '../StatusBadge';
 import { TableContainer, Table } from './styles';
 import PropTypes from 'prop-types';
 import { PencilIcon, EyeIcon } from '@phosphor-icons/react';
+import TypeBadge from '../TypeBadge';
 
 // Função para converter a data para um objeto Date
 const getDateFromPedido = (pedido) => {
@@ -43,7 +44,7 @@ export default function OrdersTable({ pedidos, onView, onEdit }) {
                 
                 <td style={{ textAlign: 'center', fontSize: '12px' }}>{pedido.nome}</td>
                 <td style={{ textAlign: 'center', fontSize: '12px' }}>{pedido.telefone}</td>
-                <td style={{ textAlign: 'center', fontSize: '12px' }}>{pedido.trophyType || 'Não informado'}</td>
+                <td style={{ textAlign: 'center', fontSize: '12px' }}><TypeBadge trophyType={pedido.trophyType} /></td>
                 <td style={{ textAlign: 'center', fontSize: '12px' }}><StatusBadge status={pedido.status} /></td>
                 <td style={{ textAlign: 'center', fontSize: '12px' }}>{pedido.date && typeof pedido.date.toDate === 'function'
   ? pedido.date.toDate().toLocaleString()

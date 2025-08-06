@@ -11,6 +11,12 @@ const theme = {
     dark: '#2c3e50',
     text: '#efefef',
     textMuted: 'rgba(255,255,255,0.8)',
+    prata: '#B0BEC5',
+    ouro: '#FFD700',
+    diamante: '#00BFFF',
+    freelancer: '#4CAF50',
+    abacatão: '#7CB342',
+    babyDev: '#AB47BC',
   },
   borderRadius: '8px',
   font: {
