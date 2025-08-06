@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import theme from '../../styles/theme';
 
 export const TableContainer = styled.div`
   width: 100%;
@@ -15,8 +16,8 @@ export const Table = styled.table`
   
   th, td {
     padding: 0.8rem 1.2rem;
-    text-align: left;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
     color: var(--text-color);
     font-weight: 400;
   }
