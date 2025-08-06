@@ -22,7 +22,7 @@ function Trophy() {
   const [pedidos, setPedidos] = useState([])
   const [filtros, setFiltros] = useState({ status: '', busca: '' })
   const [pagina, setPagina] = useState(1)
-  const [itensPorPagina] = useState(6)
+  const [itensPorPagina] = useState(5)
   const [modalPedido, setModalPedido] = useState(null)
   const [showModal, setShowModal] = useState(false)
 
