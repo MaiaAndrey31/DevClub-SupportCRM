@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import theme from '../../styles/theme';
 
 export const Sidebar = styled.aside`
   width: 280px;
@@ -7,6 +8,7 @@ export const Sidebar = styled.aside`
   padding: 1.5rem;
   overflow-y: auto;
   transition: width 0.3s, left 0.3s;
+  box-shadow: 0 0 12px ${theme.colors.primaryLight};
   @media (max-width: 900px) {
     width: 180px;
     padding: 1rem 0.5rem;
@@ -31,6 +33,7 @@ flex-direction: column;
 gap: 1.2rem;
 
 
+
 input:not([type="checkbox"]):not([type="radio"]),
 select,
 textarea {
@@ -40,6 +43,7 @@ textarea {
     border-radius: var(--border-radius);
     background-color: rgba(0, 12, 36, 0.5);
     color: white;
+    
     font-size: 0.95rem;
     transition: var(--transition);
     backdrop-filter: blur(5px);
@@ -151,14 +155,15 @@ input[type="radio"] {
 }
 
   .filter-group {
-    margin-bottom: 1.2rem;
+    margin-bottom: 1rem;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;    
     background: rgba(0, 12, 36, 0.4);
     border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
     border-radius: 20px;
-    padding: 1.25rem;
+    padding: 1.2rem;
     backdrop-filter: blur(8px);
 }
   
@@ -201,7 +206,7 @@ input[type="radio"] {
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
     @media (max-width: 500px) {
       padding: 0.5rem 0.7rem;
       font-size: 0.95rem;

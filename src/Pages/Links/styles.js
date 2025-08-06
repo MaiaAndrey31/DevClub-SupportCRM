@@ -71,7 +71,7 @@ export const LinkContent = styled.div`
 
 export const LinkTitle = styled.h3`
   margin: 0 0 0.5rem 0;
-  color: ${theme.colors.accent};
+  color: ${theme.colors.text};
   font-size: 1rem;
 `;
 

@@ -12,8 +12,9 @@ export const TableContainer = styled.div`
 export const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
+  
   th, td {
-    padding: 1.2rem 1.5rem;
+    padding: 0.8rem 1.2rem;
     text-align: left;
     border-bottom: 1px solid rgba(255,255,255,0.05);
     color: var(--text-color);

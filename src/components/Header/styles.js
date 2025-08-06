@@ -33,10 +33,11 @@ align-items: center;
 justify-content: center;
 color: ${props => props.$isActive ? `${theme.colors.text}` : `${theme.colors.textMuted}`};
 border-bottom:${props => props.$isActive ? `4px solid ${theme.colors.accent}` : 'none'};
+text-shadow: ${props => props.$isActive ? `0 0 5px ${theme.colors.primaryLight}` : 'none'} ;
 padding-bottom: 5px;
 text-decoration: none;
 font-size: 19px;
-
+font-weight: 600;
 transition: color 300ms;
 
 &:hover {
