@@ -112,9 +112,10 @@ export const ActionButtons = styled.div`
 `;
 
 export const ActionButton = styled.button`
-  background: ${theme.colors.purple};
-  border: none;
-  color: ${({ $danger }) => $danger ? '#ff6b6b' : theme.colors.text};
+  background: transparent;
+  border: 1px groove ${theme.colors.purple};
+  box-shadow: 0 0 6px ${theme.colors.primaryLight};
+  color: ${({ $danger }) => $danger ? theme.colors.danger : theme.colors.abacatão};
   cursor: pointer;
   padding: 0.5rem;
   border-radius: 4px;
@@ -128,6 +129,8 @@ export const ActionButton = styled.button`
 
   &:hover {
     background: ${({ $danger }) => $danger ? 'rgba(255, 107, 107, 0.4)' : 'rgba(255, 255, 255, 0.4)'};
+    border: 1px groove ${theme.colors.accent};
+    box-shadow: 0 0 6px inset ${theme.colors.primaryLight};
     opacity: 1;
     transform: translateY(-1px);
   }
