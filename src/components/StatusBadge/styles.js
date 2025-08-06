@@ -5,8 +5,10 @@ export const statusColors = {
   'novo pedido': `${theme.colors.primaryDark}`,
   'em produção': `${theme.colors.purple}`,
   'enviado': `${theme.colors.accent}`,
-  'entregue': `${theme.colors.dark}`,
+  'entregue': `${theme.colors.diamante}`,
   'cancelado': `${theme.colors.danger}`,
+  'na fila para produção': `${theme.colors.ouro}`,
+  'etiqueta gerada': `${theme.colors.abacatão}`,
 };
 
 export const Badge = styled.span`

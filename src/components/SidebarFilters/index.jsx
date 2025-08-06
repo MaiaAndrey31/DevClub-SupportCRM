@@ -12,7 +12,7 @@ export default function SidebarFilters({ status, search, onStatusChange, onSearc
           <select id="status-filter" value={status} onChange={e => onStatusChange(e.target.value)}>
             <option value="">Todos</option>
             <option value="Novo Pedido">Novo Pedido</option>
-            <option value="Na Fila para Produção">Na Fila para Produção</option>
+            <option value="Na Fila Para Produção">Na Fila Para Produção</option>
             <option value="Em Produção">Em Produção</option>
             <option value="Etiqueta Gerada">Etiqueta Gerada</option>
             <option value="Enviado">Enviado</option>
