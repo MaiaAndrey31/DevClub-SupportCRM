@@ -4,6 +4,8 @@ import { useState, useEffect, useRef } from 'react';
 import { perguntarChatGPT } from '../../services/openaiRm';
 import { toast } from 'react-toastify';
 import Header from '../../components/Header';
+import { UserIcon } from '@phosphor-icons/react';
+import Rodolfo from '../../assets/RodolfoIA.png'
 
 function ChatRodolfo() {
     const [mensagem, setMensagem] = useState('');
@@ -60,7 +62,7 @@ function ChatRodolfo() {
         <Header status={"connected"} page="IA Rodolfo" />
         <div style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto' }}>
             
-
+       
             <div
                 style={{
                     marginBottom: '.5rem',
@@ -85,7 +87,7 @@ function ChatRodolfo() {
                             color: msg.tipo === 'ia' ? '#f0f0f0' : '#56B459',
                         }}
                     >
-                        <strong>{msg.tipo === 'ia' ? 'Rodolfo:' : 'Você:'}</strong>
+                        <strong >{msg.tipo === 'ia' ? <><img src={Rodolfo} alt="Rodolfo" style={{ width: '40px', height: '40px', borderRadius: '50%', marginRight: '3px' }} /> Rodolfo:</> : <><UserIcon size={24} /> Você:</>}</strong>
                         <br />
                         <span style={{
                             display: 'inline-block',

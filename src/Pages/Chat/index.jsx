@@ -4,6 +4,8 @@ import { useState, useEffect, useRef } from 'react';
 import { perguntarChatGPT } from "../../services/openai";
 import { toast } from 'react-toastify';
 import Header from '../../components/Header';
+import { UserIcon } from '@phosphor-icons/react';
+import Jessyca from '../../assets/JessycaIA.png'
 
 function Chat() {
     const [mensagem, setMensagem] = useState('');
@@ -85,7 +87,7 @@ function Chat() {
                             color: msg.tipo === 'ia' ? '#f0f0f0' : '#56B459',
                         }}
                     >
-                        <strong>{msg.tipo === 'ia' ? 'Jéssyca:' : 'Você:'}</strong>
+                        <strong>{msg.tipo === 'ia' ? <><img src={Jessyca} alt="Jessica" style={{ width: '40px', height: '40px', borderRadius: '50%', marginRight: '3px' }} /> Jéssyca:</> : <><UserIcon size={24} /> Você:</>}</strong>
                         <br />
                         <span style={{
                             display: 'inline-block',
