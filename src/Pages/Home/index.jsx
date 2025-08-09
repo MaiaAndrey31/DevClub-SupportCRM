@@ -1,9 +1,6 @@
 import {
   LinkIcon,
-  Wrench,
   TrophyIcon,
-  ChatIcon,
-  CloverIcon,
 } from "@phosphor-icons/react";
 import Header from "../../components/Header";
 import {
@@ -17,6 +14,8 @@ import {
 } from "./styles";
 import theme from "../../styles/theme";
 import { useNavigate } from "react-router-dom";
+import Rodolfo from "../../assets/RodolfoIA.png"
+import Jessyca from "../../assets/JessycaIA.png"
 
 const status = "connected";
 
@@ -29,7 +28,7 @@ const Home = () => {
       <Content>
         <MainContent>
           <HomeContainer>
-            <Title>Bem-vindo ao Dev Club CRM</Title>
+            <Title>Dev Club Support CRM</Title>
             <div>
               <MenuItem>
                 <ButtonSlide
@@ -52,14 +51,14 @@ const Home = () => {
               <MenuItem>
                 <ButtonSlide className="button_slide slide_diagonal"
                 onClick={() => navigate("/chat")}>
-                  <ChatIcon size={60} color={theme.colors.accent} />
+                  <img src={Jessyca} style={{ width: '70px', height: '70px', borderRadius: '50%', marginRight: '3px' }} />
                   <p>IA Jéssyca</p>
                 </ButtonSlide>
               </MenuItem>
               <MenuItem>
                 <ButtonSlide className="button_slide slide_diagonal"
                 onClick={() => navigate("/iarodolfo")}>
-                  <ChatIcon size={60} color={theme.colors.accent} />
+                  <img src={Rodolfo} style={{ width: '70px', height: '70px', borderRadius: '50%', marginRight: '3px' }} />
                   <p>IA Rodolfo</p>
                 </ButtonSlide>
               </MenuItem>
