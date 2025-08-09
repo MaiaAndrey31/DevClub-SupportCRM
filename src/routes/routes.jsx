@@ -56,15 +56,3 @@ const router = createBrowserRouter([
 
 export { router };
 
-// export default function AppRoutes() {
-//   return (
-//     <Router>
-//       <Routes>
-//         <Route path="/" element={<Home />} />
-//         <Route path="/painel" element={<Trophy />} />
-//         <Route path="/links" element={<Links />} />
-//         <Route path="/chat" element={<Chat />} />
-//       </Routes>
-//     </Router>
-//   );
-// }
