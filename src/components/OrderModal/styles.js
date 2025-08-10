@@ -49,6 +49,8 @@ export const ModalContent = styled.div`
   margin: 0 auto;
   padding: 2rem 1.5rem;
   box-sizing: border-box;
+  border: 2px groove ${theme.colors.accent};
+  box-shadow: 0 0 14px ${theme.colors.accent};
   @media (max-width: 700px) {
     max-width: 96vw;
     padding: 1.2rem 0.5rem;
