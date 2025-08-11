@@ -20,49 +20,43 @@ export default function OrderModal({
 }) {
   const [rastreioInput, setRastreioInput] = useState(pedido?.rastreio || "");
 
-  const handleCopyOrderInfo = () => {
-    const formattedDate = pedido.date?.toDate 
-      ? new Date(pedido.date.toDate()).toLocaleString('pt-BR') 
-      : 'Data não disponível';
+  const handleCopyOrderInfo = async () => {
+    try {
+      const formattedDate = pedido.date?.toDate 
+        ? new Date(pedido.date.toDate()).toLocaleString('pt-BR') 
+        : 'Data não disponível';
 
-    const orderInfo = `Informações do Aluno
-` +
-      `Tipo de Troféu: ${pedido.trophyType || 'Não informado'}
-` +
-      `Nome: ${pedido.nome || 'Não informado'}
+      const orderInfo = `Informações do Aluno\n` +
+        `Tipo de Troféu: ${pedido.trophyType || 'Não informado'}\n` +
+        `Nome: ${pedido.nome || 'Não informado'}\n\n` +
+        `Email: ${pedido.email || 'Não informado'}\n\n` +
+        `Telefone: ${pedido.telefone || 'Não informado'}\n\n` +
+        `CPF: ${pedido.cpf || 'Não informado'}\n\n` +
+        `Data do Pedido: ${formattedDate}\n\n` +
+        `Endereço de Entrega\n` +
+        `Rua: ${pedido.endereco || 'Não informado'} ${pedido.complemento ? ` ${pedido.complemento}` : ''}\n` +
+        `Cidade: ${pedido.cidade || 'Não informada'}\n` +
+        `Estado: ${pedido.estado || 'Não informado'}\n` +
+        `CEP: ${pedido.cep || 'Não informado'}`;
 
-` +
-      `Email: ${pedido.email || 'Não informado'}
-
-` +
-      `Telefone: ${pedido.telefone || 'Não informado'}
-
-` +
-      `CPF: ${pedido.cpf || 'Não informado'}
-
-` +
-      `Data do Pedido: ${formattedDate}
-
-` +
-      `Endereço de Entrega
-` +
-      `rua: ${pedido.endereco || 'Não informado'} ${pedido.complemento ? ` ${pedido.complemento}` : ''}\n\n` +
-      `Cidade: ${pedido.cidade || 'Não informada'}\n\n` +
-      `Estado: ${pedido.estado || 'Não informado'}\n\n` +
-      `CEP: ${pedido.cep || 'Não informado'}`;
-
-    navigator.clipboard.writeText(orderInfo)
-      .then(() => {
-        toast.success('Informações copiadas para a área de transferência!');
-      })
-      .catch((err) => {
-        console.error('Erro ao copiar: ', err);
-        toast.error('Erro ao copiar as informações');
-      });
+      await navigator.clipboard.writeText(orderInfo);
+      toast.success('Informações copiadas para a área de transferência!');
+    } catch (err) {
+      console.error('Erro ao copiar: ', err);
+      toast.error('Erro ao copiar as informações');
+    }
   };
 
   useEffect(() => {
-    setRastreioInput(pedido?.rastreio || "");
+    let isMounted = true;
+    
+    if (isMounted) {
+      setRastreioInput(pedido?.rastreio || "");
+    }
+    
+    return () => {
+      isMounted = false;
+    };
   }, [pedido?.rastreio]);
 
   if (!pedido) return null;
@@ -89,7 +83,8 @@ export default function OrderModal({
                 fontSize: '14px',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '8px'
+                gap: '8px',
+                boxShadow: '0 0 10px #4CAF50',
               }}
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -177,11 +172,11 @@ OrderModal.propTypes = {
     trophyType: PropTypes.string,
     nome: PropTypes.string,
     email: PropTypes.string,
-    telefone: PropTypes.string,
-    cpf: PropTypes.string,
+    telefone: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    cpf: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     endereco: PropTypes.string,
     complemento: PropTypes.string,
-    cep: PropTypes.string,
+    cep: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     status: PropTypes.string,
     rastreio: PropTypes.string,
     bonus: PropTypes.string,

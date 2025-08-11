@@ -132,17 +132,22 @@ function Trophy() {
   // Função para disparar o webhook
   const triggerWebhook = async (pedidoData) => {
     // Usando o proxy do Vite configurado em vite.config.js
-    const webhookUrl = '/api/webhook';
+    const webhookUrl = import.meta.env.VITE_WEBHOOK_URL;
+    let controller;
+    let timeoutId;
     
-    const payload = {
-      nome: pedidoData.nome,
-      email: pedidoData.email,
-      trophyType: pedidoData.trophyType,
-      status: pedidoData.status,
-      ...(pedidoData.rastreio && { rastreio: pedidoData.rastreio })
-    };
-
     try {
+      controller = new AbortController();
+      timeoutId = setTimeout(() => controller.abort(), 10000); // 10 segundos de timeout
+      
+      const payload = {
+        nome: pedidoData.nome,
+        email: pedidoData.email,
+        trophyType: pedidoData.trophyType,
+        status: pedidoData.status,
+        ...(pedidoData.rastreio && { rastreio: pedidoData.rastreio })
+      };
+
       console.log('Enviando webhook com payload:', payload);
       
       const response = await fetch(webhookUrl, {
@@ -151,7 +156,10 @@ function Trophy() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(payload),
+        signal: controller.signal
       });
+
+      clearTimeout(timeoutId);
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -167,18 +175,29 @@ function Trophy() {
       console.log('Webhook disparado com sucesso!', responseData);
       return true;
     } catch (error) {
-      console.error('Erro ao disparar webhook:', {
-        error: error.message,
-        stack: error.stack,
-        payload
-      });
+      if (error.name === 'AbortError') {
+        console.error('Timeout ao disparar webhook: A requisição demorou muito para ser concluída');
+      } else {
+        console.error('Erro ao disparar webhook:', {
+          error: error.message,
+          stack: error.stack,
+          pedidoData
+        });
+      }
       return false;
+    } finally {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
     }
   };
 
   // Função para atualizar status do pedido
   const handleStatusUpdate = async (newStatus) => {
     if (!modalPedido || !modalPedido.id) return;
+    
+    const loadingToast = toast.loading('Atualizando status...');
+    let isMounted = true;
 
     try {
       // Atualiza o status no Firebase
@@ -186,16 +205,33 @@ function Trophy() {
         status: newStatus,
       });
 
+      if (!isMounted) return;
+
       if (success) {
         const updatedPedido = { ...modalPedido, status: newStatus };
         setModalPedido(updatedPedido);
-        toast.success(`Status atualizado para: ${newStatus}`);
         
-        // Dispara o webhook em segundo plano
-        triggerWebhook(updatedPedido).catch(error => {
-          console.error('Erro ao disparar webhook:', error);
-          toast.error('Status atualizado, mas houve um erro ao notificar o sistema.');
+        // Atualiza o toast para sucesso
+        toast.update(loadingToast, {
+          render: `Status atualizado para: ${newStatus}`,
+          type: 'success',
+          isLoading: false,
+          autoClose: 3000
         });
+        
+        // Dispara o webhook em segundo plano sem bloquear a interface
+        triggerWebhook(updatedPedido)
+          .then(webhookSuccess => {
+            if (webhookSuccess) {
+              toast.success('Sistema notificado com sucesso!');
+            } else {
+              toast.warning('Status atualizado, mas houve um erro ao notificar o sistema.');
+            }
+          })
+          .catch(error => {
+            console.error('Erro ao disparar webhook:', error);
+            toast.warning('Status atualizado, mas houve um erro ao notificar o sistema.');
+          });
       } else {
         throw new Error('Falha ao atualizar o status no banco de dados');
       }
