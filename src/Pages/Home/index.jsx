@@ -1,4 +1,5 @@
 import {
+  GiftIcon,
   LinkIcon,
   TrophyIcon,
 } from "@phosphor-icons/react";
@@ -16,7 +17,7 @@ import theme from "../../styles/theme";
 import { useNavigate } from "react-router-dom";
 import Rodolfo from "../../assets/RodolfoIA.png"
 import Jessyca from "../../assets/JessycaIA.png"
-
+import { PackageIcon } from "@phosphor-icons/react";
 const status = "connected";
 
 const Home = () => {
@@ -62,12 +63,13 @@ const Home = () => {
                   <p>IA Rodolfo</p>
                 </ButtonSlide>
               </MenuItem>
-              {/* <MenuItem>
-                <button className="button_slide slide_diagonal">
-                  <Wrench size={60} color={theme.colors.text} />
-                  <p>Tools</p>
-                </button>
-              </MenuItem> */}
+              <MenuItem>
+                <ButtonSlide className="button_slide slide_diagonal"
+                onClick={() => navigate("/bonus/manage")}>
+                  <GiftIcon size={60} color={theme.colors.accent} />
+                  <p>Bonus</p>
+                </ButtonSlide>
+              </MenuItem>
             </div>
           </HomeContainer>
         </MainContent>

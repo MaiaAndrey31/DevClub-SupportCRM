@@ -42,6 +42,9 @@ export default function Header({ status, page }) {
           <HeaderLink to={"/iarodolfo"} $isActive={pathname === "/iarodolfo"}>
             IA Rodolfo
           </HeaderLink>
+          <HeaderLink to={"/bonus/manage"} $isActive={pathname === "/bonus/manage"}>
+            Bônus
+          </HeaderLink>
           {/* <HeaderLink to={"/sorteios"} $isActive={pathname === "/sorteios"}>
             Sorteios
           </HeaderLink>

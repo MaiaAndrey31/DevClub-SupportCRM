@@ -6,6 +6,8 @@ import Login from "../Pages/Login";
 import { Private } from "./Private";
 import Chat from "../Pages/Chat";
 import ChatRodolfo from "../Pages/ChatRodolfo";
+import RegisterBonus from "../Pages/Bonus/RegisterBonus";
+import ManageBonus from "../Pages/Bonus/ManageBonus";
 
 const router = createBrowserRouter([
   {
@@ -49,6 +51,18 @@ const router = createBrowserRouter([
     element: (
       <Private>
         <Links />
+      </Private>
+    ),
+  },
+  {
+    path: "/bonus/register",
+    element: <RegisterBonus />,
+  },
+  {
+    path: "/bonus/manage",
+    element: (
+      <Private>
+        <ManageBonus />
       </Private>
     ),
   },
