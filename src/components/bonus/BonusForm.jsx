@@ -58,6 +58,7 @@ const BonusForm = () => {
           <Input
             type="text"
             name="nome"
+            placeholder="Nome do cliente"
             value={formData.nome}
             onChange={handleChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
@@ -70,6 +71,7 @@ const BonusForm = () => {
           <Input
             type="tel"
             name="telefone"
+            placeholder="Telefone do cliente"
             value={formData.telefone}
             onChange={handleChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
@@ -82,6 +84,7 @@ const BonusForm = () => {
           <Input
             type="email"
             name="email"
+            placeholder="E-mail do cliente"
             value={formData.email}
             onChange={handleChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
@@ -107,6 +110,7 @@ const BonusForm = () => {
           <Input
             type="text"
             name="atendente"
+            placeholder="Nome do atendente"
             value={formData.atendente}
             onChange={handleChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"

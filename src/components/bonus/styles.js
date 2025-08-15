@@ -29,11 +29,15 @@ export const Input = styled.input`
   width: 100%;
   padding: 0.5rem;
   color: ${theme.colors.text};
-  background: ${theme.colors.primaryDark};
+  background: rgba(255, 255, 255, 0.35) ;
   border: 2px groove ${theme.colors.accent};
   border-radius: 6px;
   font-size: 0.87rem;
   transition: border-color 0.2s;
+
+  &::placeholder {
+    color: ${theme.colors.primaryDark};
+  }
   
   &:focus {
     outline: none;
@@ -49,7 +53,7 @@ export const Select = styled.select`
   border: 1px groove ${theme.colors.accent};
   border-radius: 6px;
   font-size: 0.87rem;
-  background-color: ${theme.colors.primaryDark};
+  background: rgba(255, 255, 255, 0.35) ;
   cursor: pointer;
   
   &:focus {
