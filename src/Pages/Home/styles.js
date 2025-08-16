@@ -27,8 +27,8 @@ export const MainContent = styled.div`
 `;
 
 export const HomeContainer = styled.div`
-  height: 80%;
-  width: 80vw;
+  height: 100%;
+  max-width: 80vw;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -36,9 +36,9 @@ export const HomeContainer = styled.div`
   color: #fff;
   background-color: ${theme.colors.purple};
   border-radius: 8px;
-  box-shadow: 0 0 12px ${theme.colors.primaryLight};
-  padding: 2rem 1rem;
-  margin: 2rem auto;
+  box-shadow: 0 0 8px inset ${theme.colors.prata};
+  padding: 1.5rem 1rem;
+    margin: 1rem auto;
 
   div {
     display: flex;
@@ -50,7 +50,7 @@ export const HomeContainer = styled.div`
 `;
 
 export const Title = styled.h1`
-  font-size: 2.5rem;
+  font-size: 2rem;
   color: ${theme.colors.accent};
   margin-bottom: 1rem;
   text-align: center;
@@ -64,21 +64,21 @@ export const ButtonSlide = styled.button`
   justify-content: center;
   gap: 0.5rem;
   color: #FFF;
-  border: 2px solid ${theme.colors.accent};
-  border-radius: 0;
-  padding: 18px 36px;
+  border: 2px groove ${theme.colors.accent};
+  border-radius: 8px;
+  padding: 1px 6px;
   font-family: "Lucida Console", Monaco, monospace;
-  font-size: 14px;
+  font-size: 12px;
   letter-spacing: 1px;
   cursor: pointer;
-  box-shadow: 0 0 12px ${theme.colors.primaryLight};
+  box-shadow: 0 0 12px inset ${theme.colors.accent};
   transition: ease-out 0.3s;
   -webkit-transition: ease-out 0.3s;
   -moz-transition: ease-out 0.3s;
   background: transparent;
 
   &:hover {
-    box-shadow: inset 0px 0px 40px 0 ${theme.colors.primaryLight};
+    box-shadow:  0px 0px 25px 0 ${theme.colors.accent};
   }
 `;
 
@@ -88,17 +88,17 @@ export const MenuItem = styled.div`
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 1rem;
+  padding: .5rem;
   background-color: ${theme.colors.primaryDark};
   border-radius: ${theme.borderRadius};
-box-shadow: 0 0 12px ${theme.colors.primaryLight};
+box-shadow: 0 0 5px inset ${theme.colors.accent};
 transition: var(--transition);
 cursor: pointer;
 
   button {
     display: flex;
-    height: 160px;
-    width: 160px;
+    height: 140px;
+    width: 140px;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -109,7 +109,7 @@ cursor: pointer;
   }
 
   p {
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: 700;
     color: ${theme.colors.text};
   }

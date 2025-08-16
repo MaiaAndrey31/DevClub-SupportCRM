@@ -37,6 +37,9 @@ export const Input = styled.input`
 
   &::placeholder {
     color: ${theme.colors.primaryDark};
+    font-weight: 600;
+    text-shadow: 0 0 4px ${theme.colors.white};
+    opacity: 0.6;
   }
   
   &:focus {
@@ -113,6 +116,7 @@ export const TableHeaderCell = styled.th`
 
 export const TableRow = styled.tr`
   border-bottom: 1px groove ${theme.colors.accent};
+  box-shadow: 0 0 4px inset ${theme.colors.accent};
   text-align: center;
   
   &:last-child {
@@ -127,6 +131,7 @@ export const TableRow = styled.tr`
 export const TableCell = styled.td`
   padding: 1rem 1.5rem;
   font-size: 0.875rem;
+  font-weight: 600;
   color: ${theme.colors.text};
 `;
 
