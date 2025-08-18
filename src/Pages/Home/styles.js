@@ -71,7 +71,7 @@ export const ButtonSlide = styled.button`
   font-size: 12px;
   letter-spacing: 1px;
   cursor: pointer;
-  box-shadow: 0 0 12px inset ${theme.colors.accent};
+  box-shadow: 0 0 5px inset ${theme.colors.accent};
   transition: ease-out 0.3s;
   -webkit-transition: ease-out 0.3s;
   -moz-transition: ease-out 0.3s;
@@ -91,7 +91,8 @@ export const MenuItem = styled.div`
   padding: .5rem;
   background-color: ${theme.colors.primaryDark};
   border-radius: ${theme.borderRadius};
-box-shadow: 0 0 5px inset ${theme.colors.accent};
+box-shadow: 0 0 5px inset ${theme.colors.primaryLight};
+border: 1px groove ${theme.colors.accent};
 transition: var(--transition);
 cursor: pointer;
 
