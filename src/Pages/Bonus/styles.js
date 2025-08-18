@@ -133,13 +133,58 @@ text-align: center;
   border-radius: 6px;
 `;
 
-export const SectionTitleLarge = styled.h2`
-  font-size: 1.25rem;
-  font-weight: 800;
+export const SectionTitleLarge = styled.h2` 
+  font-size: 1.5rem;
+  font-weight: 700;
   color: ${theme.colors.accent};
+  margin: 0;
+`;
+
+export const SearchContainer = styled.div`
+  position: relative;
+  margin-left: auto;
+  margin-right: 20px;
+  width: 100%;
+  max-width: 300px;
+  
+  @media (max-width: 768px) {
+    max-width: 100%;
+    margin-top: 1rem;
+  }
+`;
+
+export const SearchInput = styled.input`
+  width: 100%;
+  padding: 0.5rem 1rem 0.5rem 2.5rem;
+  border-radius: 0.375rem;
+  border: 1px groove ${theme.colors.abacatão};
+  background-color: ${theme.colors.primaryDark};
+  color: ${theme.colors.text};
+  font-size: 0.875rem;
+  transition: all 0.2s;
+  
+  &:focus {
+    outline: none;
+    border-color: ${theme.colors.accent};
+    box-shadow: 0 0 0 1px ${theme.colors.accent};
+  }
+  
+  &::placeholder {
+    color: ${theme.colors.textMuted};
+  }
+`;
+
+export const SearchIcon = styled.span`
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: ${theme.colors.accent};
+  display: flex;
+  align-items: center;
+  pointer-events: none;
 `;
 
 export const SectionDescriptionSmall = styled.p`
   color: ${theme.colors.accent};
-          font-size: 0.875rem;
-`;
+  font-size: 0.875rem;`

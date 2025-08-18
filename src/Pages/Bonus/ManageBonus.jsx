@@ -1,21 +1,24 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { BonusList } from '../../components/bonus/BonusList';
 import { updateBonusStatus } from '../../services/bonusService';
 import { toast } from 'react-toastify';
-import { db } from '../../services/firebaseConnection';
-import { collection, query, onSnapshot } from 'firebase/firestore';
+import { FiSearch } from 'react-icons/fi';
 import {
   PageContainer,
   ContentContainer,
   Card,
   SectionHeader,
   SectionTitleLarge,
+  SearchContainer,
+  SearchInput,
+  SearchIcon
 } from './styles';
 import Header from '../../components/Header';
 
 const ManageBonus = () => {
   
   const [refreshKey, setRefreshKey] = useState(0);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const handleStatusChange = async (id, newStatus) => {
     try {
@@ -42,12 +45,24 @@ const ManageBonus = () => {
         <Card>
           <SectionHeader>
             <SectionTitleLarge>Lista de Bônus</SectionTitleLarge>
-            </SectionHeader>
+            <SearchContainer>
+              <SearchIcon>
+                <FiSearch size={20} color="#666" />
+              </SearchIcon>
+              <SearchInput 
+                type="text" 
+                placeholder="Buscar por nome ou email..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </SearchContainer>
+          </SectionHeader>
           
           <BonusList 
             isEditable={true} 
             onStatusChange={handleStatusChange}
-            key={refreshKey} // This will force a re-render when refreshKey changes
+            searchTerm={searchTerm}
+            key={refreshKey}
           />
         </Card>
       </ContentContainer>

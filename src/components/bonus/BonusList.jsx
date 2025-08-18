@@ -11,20 +11,40 @@ import {
   ActionButton
 } from './styles';
 
-export const BonusList = ({ isEditable = false, onStatusChange }) => {
+export const BonusList = ({ isEditable = false, onStatusChange, searchTerm = '' }) => {
   const [bonusList, setBonusList] = useState([]);
+  const [filteredBonusList, setFilteredBonusList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const loadBonusList = async () => {
     try {
       const data = await getBonusList();
       setBonusList(data);
+      filterBonusList(data, searchTerm);
     } catch (error) {
       console.error('Error loading bonus list:', error);
     } finally {
       setIsLoading(false);
     }
   };
+
+  const filterBonusList = (list, term) => {
+    if (!term.trim()) {
+      setFilteredBonusList(list);
+      return;
+    }
+
+    const searchLower = term.toLowerCase();
+    const filtered = list.filter(item => 
+      item.nome?.toLowerCase().includes(searchLower) || 
+      item.email?.toLowerCase().includes(searchLower)
+    );
+    setFilteredBonusList(filtered);
+  };
+
+  useEffect(() => {
+    filterBonusList(bonusList, searchTerm);
+  }, [searchTerm, bonusList]);
 
   useEffect(() => {
     loadBonusList();
@@ -40,6 +60,8 @@ export const BonusList = ({ isEditable = false, onStatusChange }) => {
   if (isLoading) {
     return <div style={{ textAlign: 'center', padding: '1rem 0' }}>Carregando...</div>;
   }
+
+  const displayList = searchTerm ? filteredBonusList : bonusList;
 
   if (bonusList.length === 0) {
     return <div style={{ textAlign: 'center', padding: '1rem 0', color: '#6b7280' }}>Nenhum bônus cadastrado.</div>;
@@ -59,7 +81,7 @@ export const BonusList = ({ isEditable = false, onStatusChange }) => {
           </tr>
         </TableHeader>
         <tbody>
-          {bonusList.map((item) => (
+          {displayList.map((item) => (
             <TableRow key={item.id}>
               <TableCell>{item.nome}</TableCell>
               <TableCell>{item.email}</TableCell>
