@@ -12,7 +12,7 @@ import {
   onSnapshot,
   query,
   where,
-  
+  orderBy
 } from 'firebase/firestore'
 import { Content, Layout, MainContent } from './styles'
 import { toast } from 'react-toastify'
@@ -33,13 +33,10 @@ function Trophy() {
       try {
         setStatus('connecting');
         const pedidosCollection = collection(db, 'pedidos');
-        let q = pedidosCollection;
-        // Filtro por status no Firestore
-        if (filtros.status) {
-          q = query(pedidosCollection, where('status', '==', filtros.status));
-        } else {
-          q = query(pedidosCollection);
-        }
+        
+        // Primeiro busca todos os pedidos
+        let q = query(pedidosCollection);
+        
         unsubscribe = onSnapshot(
           q,
           (querySnapshot) => {
@@ -47,6 +44,34 @@ function Trophy() {
             querySnapshot.forEach((doc) => {
               pedidosData.push({ id: doc.id, ...doc.data() });
             });
+            
+            // Ordena os pedidos
+            pedidosData.sort((a, b) => {
+              // Converte para Date se for um Timestamp do Firestore
+              const getDate = (dateObj) => {
+                if (!dateObj) return new Date(0);
+                if (typeof dateObj.toDate === 'function') return dateObj.toDate();
+                if (dateObj instanceof Date) return dateObj;
+                return new Date(dateObj);
+              };
+              
+              // Prioriza 'Novo Pedido'
+              if (a.status === 'Novo Pedido' && b.status !== 'Novo Pedido') return -1;
+              if (a.status !== 'Novo Pedido' && b.status === 'Novo Pedido') return 1;
+              
+              // Se ambos são 'Novo Pedido' ou nenhum é, ordena por data
+              const dateA = getDate(a.createdAt || a.dataCriacao);
+              const dateB = getDate(b.createdAt || b.dataCriacao);
+              
+              // Ordena do mais recente para o mais antigo
+              return dateB.getTime() - dateA.getTime();
+            });
+            
+            // Aplica filtro de status se existir
+            if (filtros.status) {
+              pedidosData = pedidosData.filter(pedido => pedido.status === filtros.status);
+            }
+            
             setPedidos(pedidosData);
             setStatus('connected');
           },
