@@ -1,9 +1,36 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { resolve } from 'path'
+import { readFileSync, existsSync } from 'fs'
+
+// Vite plugin to copy _redirects and _headers files
+const copyFilesPlugin = () => ({
+  name: 'copy-files',
+  closeBundle() {
+    const filesToCopy = ['_redirects', '_headers']
+    const publicDir = resolve(__dirname, 'public')
+    const outDir = resolve(__dirname, 'dist')
+    
+    filesToCopy.forEach(file => {
+      const srcPath = resolve(publicDir, file)
+      if (existsSync(srcPath)) {
+        const content = readFileSync(srcPath, 'utf-8')
+        this.emitFile({
+          type: 'asset',
+          fileName: file,
+          source: content
+        })
+      }
+    })
+  }
+})
 
 export default defineConfig({
   base: '/',
-  plugins: [react()],
+  plugins: [
+    react(),
+    copyFilesPlugin()
+  ],
   server: {
     historyApiFallback: true,
     proxy: {
@@ -14,5 +41,16 @@ export default defineConfig({
         secure: true,
       },
     },
+  },
+  build: {
+    outDir: 'dist',
+    rollupOptions: {
+      output: {
+        manualChunks: undefined,
+      },
+    },
+  },
+  preview: {
+    historyApiFallback: true,
   },
 })
