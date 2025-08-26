@@ -47,16 +47,10 @@ export default function OrderModal({
     }
   };
 
+  // Atualiza o input quando o pedido ou o rastreio mudar
   useEffect(() => {
-    let isMounted = true;
-    
-    if (isMounted) {
-      setRastreioInput(pedido?.rastreio || "");
-    }
-    
-    return () => {
-      isMounted = false;
-    };
+    const rastreio = pedido?.rastreio;
+    setRastreioInput(rastreio !== undefined && rastreio !== null ? rastreio.toString() : '');
   }, [pedido?.rastreio]);
 
   if (!pedido) return null;
@@ -139,13 +133,16 @@ export default function OrderModal({
             <label>Código de Rastreio:</label>
             <input
               type="text"
-              value={rastreioInput}
+              value={rastreioInput || ''}
               onChange={e => setRastreioInput(e.target.value)}
               onKeyDown={e => {
-                if (e.key === "Enter") {
-                  onRastreioChange(rastreioInput);
+                if (e.key === 'Enter') {
+                  onRastreioChange(e.target.value.trim());
                 }
               }}
+              onBlur={e => onRastreioChange(e.target.value.trim())}
+              placeholder="Digite o código de rastreio"
+              
             />
           </div>
           <h3 className="type">Bônus Escolhido</h3>

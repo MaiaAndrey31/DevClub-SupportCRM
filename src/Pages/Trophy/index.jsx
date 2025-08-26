@@ -8,6 +8,7 @@ import { db } from '../../services/firebaseConnection'
 import {
   collection,
   doc,
+  getDoc,
   updateDoc,
   onSnapshot,
   query,
@@ -94,16 +95,33 @@ function Trophy() {
   // Função para atualizar pedido no Firebase
   const updatePedidoInFirebase = async (pedidoId, updates) => {
     try {
-      const pedidoRef = doc(db, 'pedidos', pedidoId)
-      await updateDoc(pedidoRef, {
+      console.log('Atualizando pedido no Firebase:', { pedidoId, updates });
+      const pedidoRef = doc(db, 'pedidos', pedidoId);
+      
+      // Verifica se o documento existe
+      const docSnap = await getDoc(pedidoRef);
+      if (!docSnap.exists()) {
+        console.error('Documento não encontrado:', pedidoId);
+        return false;
+      }
+      
+      const updateData = {
         ...updates,
         updatedAt: new Date(),
-      })
-      console.log('Pedido atualizado com sucesso!')
-      return true
+      };
+      
+      console.log('Dados que serão atualizados:', updateData);
+      
+      await updateDoc(pedidoRef, updateData);
+      console.log('Pedido atualizado com sucesso no Firebase!');
+      return true;
     } catch (error) {
-      console.error('Erro ao atualizar pedido:', error)
-      return false
+      console.error('Erro ao atualizar pedido no Firebase:', {
+        error: error.message,
+        code: error.code,
+        stack: error.stack
+      });
+      return false;
     }
   }
 
@@ -157,7 +175,7 @@ function Trophy() {
   // Função para disparar o webhook
   const triggerWebhook = async (pedidoData) => {
     // Usando o proxy do Vite configurado em vite.config.js
-    const webhookUrl = import.meta.env.VITE_WEBHOOK_URL;
+    const webhookUrl = '/api/webhook';
     let controller;
     let timeoutId;
     
@@ -219,22 +237,36 @@ function Trophy() {
 
   // Função para atualizar status do pedido
   const handleStatusUpdate = async (newStatus) => {
-    if (!modalPedido || !modalPedido.id) return;
+    if (!modalPedido?.id) return;
     
     const loadingToast = toast.loading('Atualizando status...');
     let isMounted = true;
 
     try {
-      // Atualiza o status no Firebase
+      console.log('Atualizando status para:', newStatus);
+      
+      // Atualiza o estado local primeiro para feedback imediato
+      const updatedPedido = { ...modalPedido, status: newStatus };
+      setModalPedido(updatedPedido);
+      
+      // Atualiza o Firebase
       const success = await updatePedidoInFirebase(modalPedido.id, {
-        status: newStatus,
+        status: newStatus
       });
 
       if (!isMounted) return;
 
       if (success) {
-        const updatedPedido = { ...modalPedido, status: newStatus };
-        setModalPedido(updatedPedido);
+        console.log('Status atualizado com sucesso no Firebase');
+        
+        // Atualiza a lista de pedidos
+        setPedidos(prevPedidos => 
+          prevPedidos.map(pedido => 
+            pedido.id === modalPedido.id 
+              ? { ...pedido, status: newStatus, updatedAt: new Date() }
+              : pedido
+          )
+        );
         
         // Atualiza o toast para sucesso
         toast.update(loadingToast, {
@@ -244,7 +276,7 @@ function Trophy() {
           autoClose: 3000
         });
         
-        // Dispara o webhook em segundo plano sem bloquear a interface
+        // Dispara o webhook em segundo plano
         triggerWebhook(updatedPedido)
           .then(webhookSuccess => {
             if (webhookSuccess) {
@@ -262,7 +294,17 @@ function Trophy() {
       }
     } catch (error) {
       console.error('Erro ao atualizar status:', error);
-      toast.error('Erro ao atualizar status. Tente novamente.');
+      toast.update(loadingToast, {
+        render: 'Erro ao atualizar status. Tente novamente.',
+        type: 'error',
+        isLoading: false,
+        autoClose: 3000
+      });
+      
+      // Reverte as alterações locais em caso de erro
+      if (isMounted) {
+        setModalPedido(modalPedido);
+      }
     }
   };
 
@@ -271,22 +313,50 @@ function Trophy() {
     if (!modalPedido || !modalPedido.id) return;
 
     try {
+      console.log('Atualizando rastreio para:', novoRastreio);
+      
+      // Atualiza o estado local primeiro para feedback imediato
+      setModalPedido(prev => ({
+        ...prev,
+        rastreio: novoRastreio
+      }));
+      
+      // Atualiza o Firebase
       const success = await updatePedidoInFirebase(modalPedido.id, {
         rastreio: novoRastreio,
+        updatedAt: new Date()
       });
 
       if (success) {
-        setModalPedido((prev) => ({
-          ...prev,
-          rastreio: novoRastreio,
-        }));
+        console.log('Rastreio atualizado com sucesso no Firebase');
+        
+        // Atualiza a lista de pedidos
+        setPedidos(prevPedidos => 
+          prevPedidos.map(pedido => 
+            pedido.id === modalPedido.id 
+              ? { ...pedido, rastreio: novoRastreio, updatedAt: new Date() }
+              : pedido
+          )
+        );
+        
         toast.success('Código de rastreio atualizado com sucesso!');
+        return true;
       } else {
-        throw new Error('Falha ao atualizar o código de rastreio');
+        throw new Error('Falha ao atualizar o código de rastreio no Firebase');
       }
     } catch (error) {
       console.error('Erro ao atualizar rastreio:', error);
       toast.error('Erro ao atualizar código de rastreio. Tente novamente.');
+      
+      // Reverte as alterações locais em caso de erro
+      setModalPedido(prev => ({
+        ...prev,
+        rastreio: modalPedido.rastreio // Volta para o valor anterior
+      }));
+      
+      setRastreioInput(modalPedido.rastreio || '');
+      
+      return false;
     }
   }
 
@@ -326,7 +396,7 @@ function Trophy() {
           handleStatusUpdate(status)
         }}
         onRastreioChange={(codigoRastreio) => {
-          setModalPedido((p) => ({ ...p, codigoRastreio }))
+          setModalPedido((p) => ({ ...p, rastreio: codigoRastreio }))
           handleRastreioUpdate(codigoRastreio)
         }}
         onStatusUpdate={() => {

@@ -37,8 +37,19 @@ export default defineConfig({
       '/api/webhook': {
         target: 'https://n8n.rodolfomori.com.br',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/webhook/, '/webhook/181f9533-4319-4603-b713-97c42031efad'),
-        secure: true,
+        rewrite: (path) => '/webhook/181f9533-4319-4603-b713-97c42031efad',
+        secure: false,
+        configure: (proxy, _options) => {
+          proxy.on('error', (err, _req, _res) => {
+            console.log('Proxy error:', err);
+          });
+          proxy.on('proxyReq', (proxyReq, req, _res) => {
+            console.log('Sending Request to the Target:', req.method, req.url);
+          });
+          proxy.on('proxyRes', (proxyRes, req, _res) => {
+            console.log('Received Response from the Target:', proxyRes.statusCode, req.url);
+          });
+        }
       },
     },
   },
