@@ -45,9 +45,18 @@ export default defineConfig({
           });
           proxy.on('proxyReq', (proxyReq, req, _res) => {
             console.log('Sending Request to the Target:', req.method, req.url);
+            // Adiciona cabeçalhos CORS para requisições de produção e desenvolvimento
+            proxyReq.setHeader('Access-Control-Allow-Origin', 'https://suporte.devclub.com.br');
+            proxyReq.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+            proxyReq.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
           });
           proxy.on('proxyRes', (proxyRes, req, _res) => {
             console.log('Received Response from the Target:', proxyRes.statusCode, req.url);
+            // Adiciona cabeçalhos CORS nas respostas
+            proxyRes.headers['Access-Control-Allow-Origin'] = 'https://suporte.devclub.com.br';
+            proxyRes.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS';
+            proxyRes.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization';
+            proxyRes.headers['Access-Control-Allow-Credentials'] = 'true';
           });
         }
       },
