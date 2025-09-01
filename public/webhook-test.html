@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Webhook</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        pre {
+            background-color: #f8f8f8;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .success {
+            color: #2e7d32;
+        }
+        .error {
+            color: #c62828;
+        }
+    </style>
+</head>
+<body>
+    <h1>Teste de Webhook</h1>
+    <p>Esta página testa o webhook diretamente do navegador.</p>
+    
+    <div class="container">
+        <h2>Configuração</h2>
+        <div>
+            <label for="webhookUrl">URL do Webhook:</label><br>
+            <input type="text" id="webhookUrl" style="width: 100%; padding: 8px; margin: 8px 0;" 
+                   value="https://n8n.rodolfomori.com.br/webhook/181f9533-4319-4603-b713-97c42031efad">
+        </div>
+        
+        <h3>Payload de Teste</h3>
+        <textarea id="payload" rows="10" style="width: 100%; padding: 8px;">
+{
+  "nome": "Teste Webhook",
+  "email": "teste@devclub.com.br",
+  "trophyType": "ouro",
+  "status": "teste",
+  "rastreio": "BR000000000BR"
+}
+        </textarea>
+        
+        <div style="margin: 20px 0;">
+            <button id="testButton">Testar Webhook</button>
+            <span id="status" style="margin-left: 15px;"></span>
+        </div>
+        
+        <h3>Resposta</h3>
+        <div id="response" class="response">
+            <p>Clique em "Testar Webhook" para ver os resultados.</p>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById('testButton').addEventListener('click', async () => {
+            const button = document.getElementById('testButton');
+            const status = document.getElementById('status');
+            const responseDiv = document.getElementById('response');
+            
+            button.disabled = true;
+            status.textContent = 'Enviando...';
+            status.className = '';
+            
+            try {
+                const webhookUrl = document.getElementById('webhookUrl').value.trim();
+                const payload = JSON.parse(document.getElementById('payload').value);
+                
+                // Adiciona um ID único para rastreamento
+                payload.id = 'test-' + Date.now();
+                
+                const startTime = Date.now();
+                
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Request-ID': payload.id,
+                        'X-Origin': 'devclub-web-tester'
+                    },
+                    body: JSON.stringify(payload)
+                });
+                
+                const responseTime = Date.now() - startTime;
+                const responseData = await response.json().catch(() => ({}));
+                
+                let responseHTML = `
+                    <p><strong>Status:</strong> ${response.status} ${response.statusText}</p>
+                    <p><strong>Tempo de resposta:</strong> ${responseTime}ms</p>
+                    <p><strong>URL:</strong> ${webhookUrl}</p>
+                    <p><strong>Headers da Resposta:</strong></p>
+                    <pre>${JSON.stringify(Object.fromEntries([...response.headers.entries()]), null, 2)}</pre>
+                    <p><strong>Resposta:</strong></p>
+                    <pre>${JSON.stringify(responseData, null, 2)}</pre>
+                `;
+                
+                if (response.ok) {
+                    status.textContent = 'Sucesso!';
+                    status.className = 'success';
+                } else {
+                    status.textContent = `Erro: ${response.status} ${response.statusText}`;
+                    status.className = 'error';
+                }
+                
+                responseDiv.innerHTML = responseHTML;
+                
+            } catch (error) {
+                console.error('Erro:', error);
+                status.textContent = `Erro: ${error.message}`;
+                status.className = 'error';
+                responseDiv.innerHTML = `
+                    <p class="error"><strong>Erro na requisição:</strong></p>
+                    <pre>${error.stack || error.message}</pre>
+                `;
+            } finally {
+                button.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

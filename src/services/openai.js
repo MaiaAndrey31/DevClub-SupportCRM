@@ -3,14 +3,19 @@
 const API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
 import { toast } from 'react-toastify';
 
+if (!API_KEY) {
+  console.error('Erro: A chave da API do OpenAI não está configurada.');
+  toast.error('Erro de configuração: Chave da API não encontrada');
+}
+
 const AGENT_CONFIG = {
-  model: "gpt-4-turbo",
+  model: 'gpt-4-turbo',
   temperature: 0.7,
-};
+}
 
 let conversationHistory = [
   {
-    role: "system",
+    role: 'system',
     content: `Prompt de Identidade e Comportamento — Jéssyca (IA DevClub)
 
 Você é Jéssyca, a inteligência artificial oficial do DevClub, especializada em atendimento operacional, suporte técnico, integração com sistemas e informações administrativas sobre alunos.
@@ -117,48 +122,58 @@ Usar negrito ou itálico para destacar informações, se possível.
 
 `,
   },
-];
+]
 
 export async function perguntarChatGPT(pergunta) {
   if (!API_KEY) {
-    const errorMsg = "Erro: Chave da API não configurada. Por favor, verifique as configurações.";
-    console.error("OpenAI API key is not set");
-    toast.error(errorMsg);
-    return errorMsg;
+    throw new Error('Chave da API não configurada');
+  }
+  
+  if (!pergunta || typeof pergunta !== 'string' || pergunta.trim() === '') {
+    throw new Error('Pergunta inválida');
+  }
+  if (!API_KEY) {
+    const errorMsg =
+      'Erro: Chave da API não configurada. Por favor, verifique as configurações.'
+    console.error('OpenAI API key is not set')
+    toast.error(errorMsg)
+    return errorMsg
   }
 
   try {
     // Adiciona a pergunta do usuário ao histórico
-    conversationHistory.push({ role: "user", content: pergunta });
+    conversationHistory.push({ role: 'user', content: pergunta })
 
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
       headers: {
         Authorization: `Bearer ${API_KEY}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         model: AGENT_CONFIG.model,
         messages: conversationHistory,
         temperature: AGENT_CONFIG.temperature,
       }),
-    });
+    })
 
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      const errorMsg = `Erro na API: ${errorData.error?.message || "Erro desconhecido"}`;
-      console.error("OpenAI API Error:", errorData);
-      toast.error(errorMsg);
-      return errorMsg;
+      const errorData = await response.json().catch(() => ({}))
+      const errorMsg = `Erro na API: ${
+        errorData.error?.message || 'Erro desconhecido'
+      }`
+      console.error('OpenAI API Error:', errorData)
+      toast.error(errorMsg)
+      return errorMsg
     }
 
-    const data = await response.json();
+    const data = await response.json()
     const resposta =
       data.choices?.[0]?.message?.content ||
-      "Desculpe, não consegui processar sua solicitação no momento.";
+      'Desculpe, não consegui processar sua solicitação no momento.'
 
     // Adiciona a resposta ao histórico
-    conversationHistory.push({ role: "assistant", content: resposta });
+    conversationHistory.push({ role: 'assistant', content: resposta })
 
     // Mantém o histórico com um tamanho razoável
     if (conversationHistory.length > 20) {
@@ -166,14 +181,15 @@ export async function perguntarChatGPT(pergunta) {
       conversationHistory = [
         conversationHistory[0], // Mantém a mensagem do sistema
         ...conversationHistory.slice(-19), // Mantém as últimas 19 mensagens
-      ];
+      ]
     }
 
-    return resposta;
+    return resposta
   } catch (error) {
-    const errorMsg = "Desculpe, estou enfrentando dificuldades técnicas. Por favor, tente novamente mais tarde.";
-    console.error("Erro ao chamar a API:", error);
-    toast.error(errorMsg);
-    return errorMsg;
+    const errorMsg =
+      'Desculpe, estou enfrentando dificuldades técnicas. Por favor, tente novamente mais tarde.'
+    console.error('Erro ao chamar a API:', error)
+    toast.error(errorMsg)
+    return errorMsg
   }
 }

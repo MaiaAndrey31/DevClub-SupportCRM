@@ -12,11 +12,11 @@ import {
   updateDoc,
   onSnapshot,
   query,
-  where,
-  orderBy
+  
 } from 'firebase/firestore'
 import { Content, Layout, MainContent } from './styles'
 import { toast } from 'react-toastify'
+import WebhookTester from '../../components/WebhookTester'
 
 function Trophy() {
   const [status, setStatus] = useState('connecting')
@@ -174,13 +174,11 @@ function Trophy() {
 
   // Função para disparar o webhook
   const triggerWebhook = async (pedidoData) => {
-    // Usando o proxy do Vite configurado em vite.config.js
     const webhookUrl = '/api/webhook';
-    let controller;
-    let timeoutId;
+    const controller = new AbortController();
+    let timeoutId = null;
     
     try {
-      controller = new AbortController();
       timeoutId = setTimeout(() => controller.abort(), 10000); // 10 segundos de timeout
       
       const payload = {
@@ -191,47 +189,70 @@ function Trophy() {
         ...(pedidoData.rastreio && { rastreio: pedidoData.rastreio })
       };
 
-      console.log('Enviando webhook com payload:', payload);
-      
+      console.log('Enviando webhook para pedido:', {
+        pedidoId: pedidoData.id,
+        payload: payload
+      });
+
       const response = await fetch(webhookUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'X-Request-ID': pedidoData.id || 'unknown',
+          'X-Origin': 'devclub-crm-painel'
         },
         body: JSON.stringify(payload),
         signal: controller.signal
       });
 
       clearTimeout(timeoutId);
-
+      
+      const responseData = await response.json().catch(() => ({}));
+      
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error('Erro na resposta do webhook:', {
+        const error = new Error(`Erro ${response.status}: ${response.statusText}`);
+        error.response = {
           status: response.status,
           statusText: response.statusText,
-          body: errorText
-        });
-        throw new Error(`Erro ao enviar webhook: ${response.status}`);
+          data: responseData
+        };
+        throw error;
       }
+      
+      console.log('Webhook disparado com sucesso:', {
+        pedidoId: pedidoData.id,
+        response: responseData
+      });
 
-      const responseData = await response.json().catch(() => ({}));
-      console.log('Webhook disparado com sucesso!', responseData);
       return true;
     } catch (error) {
-      if (error.name === 'AbortError') {
-        console.error('Timeout ao disparar webhook: A requisição demorou muito para ser concluída');
-      } else {
-        console.error('Erro ao disparar webhook:', {
-          error: error.message,
-          stack: error.stack,
-          pedidoData
-        });
-      }
-      return false;
-    } finally {
       if (timeoutId) {
         clearTimeout(timeoutId);
       }
+      
+      const errorDetails = {
+        name: error.name,
+        message: error.message,
+        pedidoId: pedidoData?.id || 'unknown',
+        timestamp: new Date().toISOString(),
+        response: error.response || {}
+      };
+
+      if (error.name === 'AbortError') {
+        errorDetails.details = 'Timeout: A requisição demorou mais de 10 segundos';
+        console.error('Timeout ao disparar webhook:', errorDetails);
+      } else if (error.response) {
+        // Erro de resposta HTTP (4xx, 5xx)
+        errorDetails.status = error.response.status;
+        errorDetails.statusText = error.response.statusText;
+        console.error('Erro na resposta do webhook:', errorDetails);
+      } else {
+        // Erro de rede ou outro erro
+        errorDetails.details = error.stack || 'Erro desconhecido';
+        console.error('Falha ao conectar com o webhook:', errorDetails);
+      }
+      
+      return false;
     }
   };
 
@@ -405,6 +426,12 @@ function Trophy() {
           }
         }}
       />
+      {/* Webhook Tester - Only visible in development */}
+      {process.env.NODE_ENV === 'development' && (
+        <div style={{ margin: '40px 20px' }}>
+          <WebhookTester />
+        </div>
+      )}
     </Layout>
   )
 }

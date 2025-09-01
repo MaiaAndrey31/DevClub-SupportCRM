@@ -38,16 +38,33 @@ export default defineConfig({
         target: 'https://n8n.rodolfomori.com.br',
         changeOrigin: true,
         rewrite: (path) => '/webhook/181f9533-4319-4603-b713-97c42031efad',
-        secure: false,
+        secure: true,
+        headers: {
+          'Access-Control-Allow-Origin': 'https://suporte.devclub.com.br',
+          'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+        },
         configure: (proxy, _options) => {
-          proxy.on('error', (err, _req, _res) => {
-            console.log('Proxy error:', err);
+          proxy.on('error', (err, req, res) => {
+            console.error('Proxy error:', {
+              error: err.message,
+              url: req?.url,
+              method: req?.method
+            });
+            if (!res.headersSent) {
+              res.writeHead(500, {
+                'Content-Type': 'application/json'
+              });
+            }
+            res.end(JSON.stringify({ error: 'Erro no proxy' }));
           });
+          
           proxy.on('proxyReq', (proxyReq, req, _res) => {
-            console.log('Sending Request to the Target:', req.method, req.url);
-            // Adiciona cabeçalhos CORS para requisições de produção e desenvolvimento
-            proxyReq.setHeader('Access-Control-Allow-Origin', 'https://suporte.devclub.com.br');
-            proxyReq.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+            console.log('Enviando requisição para o webhook:', {
+              method: req.method,
+              url: req.url,
+              headers: req.headers
+            });
             proxyReq.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
           });
           proxy.on('proxyRes', (proxyRes, req, _res) => {
