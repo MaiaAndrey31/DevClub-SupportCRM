@@ -426,12 +426,7 @@ function Trophy() {
           }
         }}
       />
-      {/* Webhook Tester - Only visible in development */}
-      {process.env.NODE_ENV === 'development' && (
-        <div style={{ margin: '40px 20px' }}>
-          <WebhookTester />
-        </div>
-      )}
+    
     </Layout>
   )
 }

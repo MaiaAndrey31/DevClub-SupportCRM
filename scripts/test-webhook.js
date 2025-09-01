@@ -14,7 +14,7 @@ const testPayload = {
 };
 
 const options = {
-  hostname: 'n8n.rodolfomori.com.br',
+  hostname: 'primary-production-21a63.up.railway.app',
   path: '/webhook/181f9533-4319-4603-b713-97c42031efad',
   method: 'POST',
   headers: {
