@@ -5,11 +5,11 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/api': {
-        target: 'https://n8n.rodolfomori.com.br',
+      '/api/webhook': {
+        target: 'https://n8n-webhook.sako8u.easypanel.host',
         changeOrigin: true,
         secure: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
+        rewrite: (path) => '/webhook/181f9533-4319-4603-b713-97c42031efad',
         configure: (proxy, _options) => {
           proxy.on('error', (err, req, res) => {
             console.error('Proxy Error:', {
