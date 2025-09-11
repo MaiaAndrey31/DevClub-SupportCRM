@@ -35,7 +35,7 @@ export default defineConfig({
     historyApiFallback: true,
     proxy: {
       '/api/webhook': {
-        target: 'https://primary-production-21a63.up.railway.app',
+        target: 'https://n8n-webhook.sako8u.easypanel.host',
         changeOrigin: true,
         rewrite: (path) => '/webhook/181f9533-4319-4603-b713-97c42031efad',
         secure: true,
