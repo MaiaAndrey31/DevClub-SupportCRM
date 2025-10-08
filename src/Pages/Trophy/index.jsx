@@ -174,7 +174,7 @@ function Trophy() {
 
   // Função para disparar o webhook
   const triggerWebhook = async (pedidoData) => {
-    const webhookUrl = '/api/webhook';
+    const webhookUrl = 'https://n8n-webhook.sako8u.easypanel.host/webhook/181f9533-4319-4603-b713-97c42031efad';
     const controller = new AbortController();
     let timeoutId = null;
     

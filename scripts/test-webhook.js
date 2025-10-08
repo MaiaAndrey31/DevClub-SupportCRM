@@ -14,7 +14,7 @@ const testPayload = {
 };
 
 const options = {
-  hostname: 'primary-production-21a63.up.railway.app',
+  hostname: 'n8n-webhook.sako8u.easypanel.host',
   path: '/webhook/181f9533-4319-4603-b713-97c42031efad',
   method: 'POST',
   headers: {
