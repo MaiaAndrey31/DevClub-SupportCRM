@@ -8,6 +8,8 @@ export const statusColors = {
   'freelancer 10k': `${theme.colors.freelancer}`,
   'abacatão': `${theme.colors.abacatão}`,
   'baby dev': `${theme.colors.babyDev}`,
+  'abacatão ia': `${theme.colors.abacataoIa}`,
+  'baby ia': `${theme.colors.babyIa}`,
 };
 
 export const Badge = styled.span`
