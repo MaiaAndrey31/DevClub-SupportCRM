@@ -141,15 +141,30 @@ export async function perguntarChatGPT(pergunta) {
     })
 
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}))
-      const errorMsg = `Erro na API: ${errorData.error?.message || 'Erro desconhecido'
-        }`
-      console.error('OpenAI API Error:', errorData)
-      toast.error(errorMsg)
-      return errorMsg
+      const errorText = await response.text();
+      console.error('OpenAI API Error Response Text:', errorText);
+      let errorMsg = 'Erro na API: Resposta inesperada do servidor.';
+      try {
+        const errorData = JSON.parse(errorText);
+        errorMsg = `Erro na API: ${errorData.error?.message || 'Erro desconhecido'}`;
+      } catch (e) {
+        // A resposta não é JSON, o que confirma o erro original.
+      }
+      toast.error(errorMsg);
+      return errorMsg;
     }
 
-    const data = await response.json()
+    const responseText = await response.text();
+    let data;
+    try {
+      data = JSON.parse(responseText);
+    } catch (error) {
+      console.error('Erro ao processar JSON:', responseText); // Loga a resposta que não é JSON
+      const errorMsg =
+        'Desculpe, a resposta do servidor não é válida. Por favor, tente novamente mais tarde.';
+      toast.error(errorMsg);
+      return errorMsg;
+    }
     const resposta =
       data.choices?.[0]?.message?.content ||
       'Desculpe, não consegui processar sua solicitação no momento.'
