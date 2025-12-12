@@ -12,7 +12,7 @@ import {
   updateDoc,
   onSnapshot,
   query,
-  
+
 } from 'firebase/firestore'
 import { Content, Layout, MainContent } from './styles'
 import { toast } from 'react-toastify'
@@ -34,10 +34,10 @@ function Trophy() {
       try {
         setStatus('connecting');
         const pedidosCollection = collection(db, 'pedidos');
-        
+
         // Primeiro busca todos os pedidos
         let q = query(pedidosCollection);
-        
+
         unsubscribe = onSnapshot(
           q,
           (querySnapshot) => {
@@ -45,7 +45,7 @@ function Trophy() {
             querySnapshot.forEach((doc) => {
               pedidosData.push({ id: doc.id, ...doc.data() });
             });
-            
+
             // Ordena os pedidos
             pedidosData.sort((a, b) => {
               // Converte para Date se for um Timestamp do Firestore
@@ -55,24 +55,19 @@ function Trophy() {
                 if (dateObj instanceof Date) return dateObj;
                 return new Date(dateObj);
               };
-              
+
               // Prioriza 'Novo Pedido'
               if (a.status === 'Novo Pedido' && b.status !== 'Novo Pedido') return -1;
               if (a.status !== 'Novo Pedido' && b.status === 'Novo Pedido') return 1;
-              
+
               // Se ambos são 'Novo Pedido' ou nenhum é, ordena por data
               const dateA = getDate(a.createdAt || a.dataCriacao);
               const dateB = getDate(b.createdAt || b.dataCriacao);
-              
+
               // Ordena do mais recente para o mais antigo
               return dateB.getTime() - dateA.getTime();
             });
-            
-            // Aplica filtro de status se existir
-            if (filtros.status) {
-              pedidosData = pedidosData.filter(pedido => pedido.status === filtros.status);
-            }
-            
+
             setPedidos(pedidosData);
             setStatus('connected');
           },
@@ -90,28 +85,28 @@ function Trophy() {
     return () => {
       if (unsubscribe) unsubscribe();
     };
-  }, [filtros.status]);
+  }, []);
 
   // Função para atualizar pedido no Firebase
   const updatePedidoInFirebase = async (pedidoId, updates) => {
     try {
       console.log('Atualizando pedido no Firebase:', { pedidoId, updates });
       const pedidoRef = doc(db, 'pedidos', pedidoId);
-      
+
       // Verifica se o documento existe
       const docSnap = await getDoc(pedidoRef);
       if (!docSnap.exists()) {
         console.error('Documento não encontrado:', pedidoId);
         return false;
       }
-      
+
       const updateData = {
         ...updates,
         updatedAt: new Date(),
       };
-      
+
       console.log('Dados que serão atualizados:', updateData);
-      
+
       await updateDoc(pedidoRef, updateData);
       console.log('Pedido atualizado com sucesso no Firebase!');
       return true;
@@ -125,15 +120,15 @@ function Trophy() {
     }
   }
 
-  // Filtro de busca (nome, telefone, email) no pai
+  // Filtros combinados (status e busca)
   const pedidosFiltrados = pedidos.filter(pedido => {
-    if (!filtros.busca) return true;
-    const buscaLower = filtros.busca.toLowerCase();
-    return (
-      (pedido.nome && pedido.nome.toLowerCase().includes(buscaLower)) ||
+    const statusMatch = !filtros.status || pedido.status === filtros.status;
+    const buscaMatch = !filtros.busca ||
+      (pedido.nome && pedido.nome.toLowerCase().includes(filtros.busca.toLowerCase())) ||
       (pedido.telefone && String(pedido.telefone).includes(filtros.busca)) ||
-      (pedido.email && pedido.email.toLowerCase().includes(buscaLower))
-    );
+      (pedido.email && pedido.email.toLowerCase().includes(filtros.busca.toLowerCase()));
+
+    return statusMatch && buscaMatch;
   });
   const totalPaginas = Math.ceil(pedidosFiltrados.length / itensPorPagina);
   const pedidosPagina = pedidosFiltrados.slice(
@@ -151,7 +146,7 @@ function Trophy() {
     setPagina(1)
   }
 
-  
+
   function handleResetFilters() {
     setFiltros({ status: '', busca: '' })
     setPagina(1)
@@ -172,15 +167,25 @@ function Trophy() {
     setModalPedido(null)
   }
 
+  async function handleSavePedido(editedPedido) {
+    const success = await updatePedidoInFirebase(editedPedido.id, editedPedido);
+    if (success) {
+      setPedidos(prev => prev.map(p => p.id === editedPedido.id ? editedPedido : p));
+      toast.success('Pedido atualizado com sucesso!');
+    } else {
+      toast.error('Erro ao atualizar o pedido.');
+    }
+  }
+
   // Função para disparar o webhook
   const triggerWebhook = async (pedidoData) => {
     const webhookUrl = 'https://n8n-webhook.sako8u.easypanel.host/webhook/181f9533-4319-4603-b713-97c42031efad';
     const controller = new AbortController();
     let timeoutId = null;
-    
+
     try {
       timeoutId = setTimeout(() => controller.abort(), 10000); // 10 segundos de timeout
-      
+
       const payload = {
         nome: pedidoData.nome,
         email: pedidoData.email,
@@ -206,9 +211,9 @@ function Trophy() {
       });
 
       clearTimeout(timeoutId);
-      
+
       const responseData = await response.json().catch(() => ({}));
-      
+
       if (!response.ok) {
         const error = new Error(`Erro ${response.status}: ${response.statusText}`);
         error.response = {
@@ -218,7 +223,7 @@ function Trophy() {
         };
         throw error;
       }
-      
+
       console.log('Webhook disparado com sucesso:', {
         pedidoId: pedidoData.id,
         response: responseData
@@ -229,7 +234,7 @@ function Trophy() {
       if (timeoutId) {
         clearTimeout(timeoutId);
       }
-      
+
       const errorDetails = {
         name: error.name,
         message: error.message,
@@ -251,7 +256,7 @@ function Trophy() {
         errorDetails.details = error.stack || 'Erro desconhecido';
         console.error('Falha ao conectar com o webhook:', errorDetails);
       }
-      
+
       return false;
     }
   };
@@ -259,17 +264,17 @@ function Trophy() {
   // Função para atualizar status do pedido
   const handleStatusUpdate = async (newStatus) => {
     if (!modalPedido?.id) return;
-    
+
     const loadingToast = toast.loading('Atualizando status...');
     let isMounted = true;
 
     try {
       console.log('Atualizando status para:', newStatus);
-      
+
       // Atualiza o estado local primeiro para feedback imediato
       const updatedPedido = { ...modalPedido, status: newStatus };
       setModalPedido(updatedPedido);
-      
+
       // Atualiza o Firebase
       const success = await updatePedidoInFirebase(modalPedido.id, {
         status: newStatus
@@ -279,16 +284,16 @@ function Trophy() {
 
       if (success) {
         console.log('Status atualizado com sucesso no Firebase');
-        
+
         // Atualiza a lista de pedidos
-        setPedidos(prevPedidos => 
-          prevPedidos.map(pedido => 
-            pedido.id === modalPedido.id 
+        setPedidos(prevPedidos =>
+          prevPedidos.map(pedido =>
+            pedido.id === modalPedido.id
               ? { ...pedido, status: newStatus, updatedAt: new Date() }
               : pedido
           )
         );
-        
+
         // Atualiza o toast para sucesso
         toast.update(loadingToast, {
           render: `Status atualizado para: ${newStatus}`,
@@ -296,7 +301,7 @@ function Trophy() {
           isLoading: false,
           autoClose: 3000
         });
-        
+
         // Dispara o webhook em segundo plano
         triggerWebhook(updatedPedido)
           .then(webhookSuccess => {
@@ -321,7 +326,7 @@ function Trophy() {
         isLoading: false,
         autoClose: 3000
       });
-      
+
       // Reverte as alterações locais em caso de erro
       if (isMounted) {
         setModalPedido(modalPedido);
@@ -335,13 +340,13 @@ function Trophy() {
 
     try {
       console.log('Atualizando rastreio para:', novoRastreio);
-      
+
       // Atualiza o estado local primeiro para feedback imediato
       setModalPedido(prev => ({
         ...prev,
         rastreio: novoRastreio
       }));
-      
+
       // Atualiza o Firebase
       const success = await updatePedidoInFirebase(modalPedido.id, {
         rastreio: novoRastreio,
@@ -350,16 +355,16 @@ function Trophy() {
 
       if (success) {
         console.log('Rastreio atualizado com sucesso no Firebase');
-        
+
         // Atualiza a lista de pedidos
-        setPedidos(prevPedidos => 
-          prevPedidos.map(pedido => 
-            pedido.id === modalPedido.id 
+        setPedidos(prevPedidos =>
+          prevPedidos.map(pedido =>
+            pedido.id === modalPedido.id
               ? { ...pedido, rastreio: novoRastreio, updatedAt: new Date() }
               : pedido
           )
         );
-        
+
         toast.success('Código de rastreio atualizado com sucesso!');
         return true;
       } else {
@@ -368,15 +373,15 @@ function Trophy() {
     } catch (error) {
       console.error('Erro ao atualizar rastreio:', error);
       toast.error('Erro ao atualizar código de rastreio. Tente novamente.');
-      
+
       // Reverte as alterações locais em caso de erro
       setModalPedido(prev => ({
         ...prev,
         rastreio: modalPedido.rastreio // Volta para o valor anterior
       }));
-      
+
       setRastreioInput(modalPedido.rastreio || '');
-      
+
       return false;
     }
   }
@@ -425,8 +430,9 @@ function Trophy() {
             handleStatusUpdate(modalPedido.status)
           }
         }}
+        onSave={handleSavePedido}
       />
-    
+
     </Layout>
   )
 }

@@ -17,13 +17,16 @@ export default function OrderModal({
   onStatusChange,
   onRastreioChange,
   onStatusUpdate,
+  onSave, // Nova prop para salvar
 }) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedPedido, setEditedPedido] = useState(pedido);
   const [rastreioInput, setRastreioInput] = useState(pedido?.rastreio || "");
 
   const handleCopyOrderInfo = async () => {
     try {
-      const formattedDate = pedido.date?.toDate 
-        ? new Date(pedido.date.toDate()).toLocaleString('pt-BR') 
+      const formattedDate = pedido.date?.toDate
+        ? new Date(pedido.date.toDate()).toLocaleString('pt-BR')
         : 'Data não disponível';
 
       const orderInfo = `Informações do Aluno\n` +
@@ -47,11 +50,17 @@ export default function OrderModal({
     }
   };
 
-  // Atualiza o input quando o pedido ou o rastreio mudar
+  // Atualiza o estado de edição quando o pedido muda
   useEffect(() => {
+    setEditedPedido(pedido);
     const rastreio = pedido?.rastreio;
     setRastreioInput(rastreio !== undefined && rastreio !== null ? rastreio.toString() : '');
-  }, [pedido?.rastreio]);
+  }, [pedido]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditedPedido(prev => ({ ...prev, [name]: value }));
+  };
 
   if (!pedido) return null;
 
@@ -65,7 +74,7 @@ export default function OrderModal({
         <div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <h2>Informações do Aluno</h2>
-            <button 
+            <button
               onClick={handleCopyOrderInfo}
               style={{
                 backgroundColor: '#4CAF50',
@@ -88,27 +97,45 @@ export default function OrderModal({
               Copiar Dados
             </button>
           </div>
-          <h3 className="type">Tipo de Troféu: {pedido.trophyType}</h3>
-          <p>
-            <strong>Nome:</strong> {pedido.nome}
-          </p>
-          <p>
-            <strong>Email:</strong> {pedido.email}
-          </p>
-          <p>
-            <strong>Telefone:</strong> {pedido.telefone}
-          </p>
-          <p>
-            <strong>CPF:</strong> {pedido.cpf}
-          </p>
-          <p><strong>Data do Pedido:</strong> {pedido.date?.toDate ? new Date(pedido.date.toDate()).toLocaleString('pt-BR') : 'Data não disponível'}</p>
-          <h3 className="type">Endereço de Entrega</h3>
-          <p>{pedido.endereco}  {pedido.complemento}</p>
-          <p><strong>Cidade:</strong> {pedido.cidade}</p>
-          <p><strong>Estado:</strong> {pedido.estado}</p>
-          <p>
-            <strong>CEP:</strong> {pedido.cep}
-          </p>
+          {isEditing ? (
+            <>
+              <label>Tipo de Troféu:</label>
+              <input type="text" name="trophyType" value={editedPedido.trophyType || ''} onChange={handleInputChange} />
+              <label>Nome:</label>
+              <input type="text" name="nome" value={editedPedido.nome || ''} onChange={handleInputChange} />
+              <label>Email:</label>
+              <input type="email" name="email" value={editedPedido.email || ''} onChange={handleInputChange} />
+              <label>Telefone:</label>
+              <input type="text" name="telefone" value={editedPedido.telefone || ''} onChange={handleInputChange} />
+              <label>CPF:</label>
+              <input type="text" name="cpf" value={editedPedido.cpf || ''} onChange={handleInputChange} />
+              <h3 className="type">Endereço de Entrega</h3>
+              <label>Endereço:</label>
+              <input type="text" name="endereco" value={editedPedido.endereco || ''} onChange={handleInputChange} />
+              <label>Complemento:</label>
+              <input type="text" name="complemento" value={editedPedido.complemento || ''} onChange={handleInputChange} />
+              <label>Cidade:</label>
+              <input type="text" name="cidade" value={editedPedido.cidade || ''} onChange={handleInputChange} />
+              <label>Estado:</label>
+              <input type="text" name="estado" value={editedPedido.estado || ''} onChange={handleInputChange} />
+              <label>CEP:</label>
+              <input type="text" name="cep" value={editedPedido.cep || ''} onChange={handleInputChange} />
+            </>
+          ) : (
+            <>
+              <h3 className="type">Tipo de Troféu: {pedido.trophyType}</h3>
+              <p><strong>Nome:</strong> {pedido.nome}</p>
+              <p><strong>Email:</strong> {pedido.email}</p>
+              <p><strong>Telefone:</strong> {pedido.telefone}</p>
+              <p><strong>CPF:</strong> {pedido.cpf}</p>
+              <p><strong>Data do Pedido:</strong> {pedido.date?.toDate ? new Date(pedido.date.toDate()).toLocaleString('pt-BR') : 'Data não disponível'}</p>
+              <h3 className="type">Endereço de Entrega</h3>
+              <p>{pedido.endereco} {pedido.complemento}</p>
+              <p><strong>Cidade:</strong> {pedido.cidade}</p>
+              <p><strong>Estado:</strong> {pedido.estado}</p>
+              <p><strong>CEP:</strong> {pedido.cep}</p>
+            </>
+          )}
           <h3 className="type">Status do Pedido</h3>
           <select
             value={pedido.status}
@@ -142,20 +169,40 @@ export default function OrderModal({
               }}
               onBlur={e => onRastreioChange(e.target.value.trim())}
               placeholder="Digite o código de rastreio"
-              
+
             />
           </div>
           <h3 className="type">Bônus Escolhido</h3>
-          <p>{pedido.bonus}</p>
-          
+          {isEditing ? (
+            <input type="text" name="bonus" value={editedPedido.bonus || ''} onChange={handleInputChange} />
+          ) : (
+            <p>{pedido.bonus}</p>
+          )}
+
         </div>
         <div style={{ marginTop: "2rem", display: "flex", gap: "1rem" }}>
-          <button className="btn btn-secondary" onClick={onClose}>
-            Fechar
-          </button>
-          <button className="btn btn-primary" onClick={onNotify}>
-            Enviar Notificação
-          </button>
+          {isEditing ? (
+            <>
+              <button className="btn btn-primary" onClick={() => { onSave(editedPedido); setIsEditing(false); }}>
+                Salvar
+              </button>
+              <button className="btn btn-secondary" onClick={() => { setIsEditing(false); setEditedPedido(pedido); }}>
+                Cancelar
+              </button>
+            </>
+          ) : (
+            <>
+              <button className="btn" onClick={() => setIsEditing(true)}>
+                Editar
+              </button>
+              <button className="btn btn-secondary" onClick={onClose}>
+                Fechar
+              </button>
+              <button className="btn btn-primary" onClick={onNotify}>
+                Enviar Notificação
+              </button>
+            </>
+          )}
         </div>
       </ModalContent>
     </ModalOverlay>
@@ -183,4 +230,5 @@ OrderModal.propTypes = {
   onStatusChange: PropTypes.func.isRequired,
   onRastreioChange: PropTypes.func.isRequired,
   onStatusUpdate: PropTypes.func.isRequired,
+  onSave: PropTypes.func.isRequired,
 };
