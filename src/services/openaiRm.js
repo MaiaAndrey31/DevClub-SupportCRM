@@ -1,6 +1,5 @@
 // src/services/openai.js
 
-const API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
 import { toast } from 'react-toastify';
 
 const AGENT_CONFIG = {
@@ -184,21 +183,14 @@ Não quero que utilize essa expressão cê e sim você
 ];
 
 export async function perguntarChatGPT(pergunta) {
-  if (!API_KEY) {
-    const errorMsg = "Erro: Chave da API não configurada. Por favor, verifique as configurações.";
-    console.error("OpenAI API key is not set");
-    toast.error(errorMsg);
-    return errorMsg;
-  }
 
   try {
     // Adiciona a pergunta do usuário ao histórico
     conversationHistory.push({ role: "user", content: pergunta });
 
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    const response = await fetch("/api/openai/v1/chat/completions", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${API_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({

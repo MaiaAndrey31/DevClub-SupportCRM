@@ -1,12 +1,6 @@
 // src/services/openai.js
 
-const API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
 import { toast } from 'react-toastify';
-
-if (!API_KEY) {
-  console.error('Erro: A chave da API do OpenAI não está configurada.');
-  toast.error('Erro de configuração: Chave da API não encontrada');
-}
 
 const AGENT_CONFIG = {
   model: 'gpt-4-turbo',
@@ -125,29 +119,18 @@ Usar negrito ou itálico para destacar informações, se possível.
 ]
 
 export async function perguntarChatGPT(pergunta) {
-  if (!API_KEY) {
-    throw new Error('Chave da API não configurada');
-  }
-  
+
   if (!pergunta || typeof pergunta !== 'string' || pergunta.trim() === '') {
     throw new Error('Pergunta inválida');
-  }
-  if (!API_KEY) {
-    const errorMsg =
-      'Erro: Chave da API não configurada. Por favor, verifique as configurações.'
-    console.error('OpenAI API key is not set')
-    toast.error(errorMsg)
-    return errorMsg
   }
 
   try {
     // Adiciona a pergunta do usuário ao histórico
     conversationHistory.push({ role: 'user', content: pergunta })
 
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch('/api/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -159,9 +142,8 @@ export async function perguntarChatGPT(pergunta) {
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}))
-      const errorMsg = `Erro na API: ${
-        errorData.error?.message || 'Erro desconhecido'
-      }`
+      const errorMsg = `Erro na API: ${errorData.error?.message || 'Erro desconhecido'
+        }`
       console.error('OpenAI API Error:', errorData)
       toast.error(errorMsg)
       return errorMsg
